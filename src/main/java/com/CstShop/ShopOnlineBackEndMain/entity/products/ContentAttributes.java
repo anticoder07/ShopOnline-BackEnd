@@ -3,11 +3,11 @@ package com.CstShop.ShopOnlineBackEndMain.entity.products;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "content_attributes")
+@Table(name = "content_attribute")
 public class ContentAttributes {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long contentAttributeId;
+	private Long id;
 
 	private byte[] picture;
 
@@ -17,7 +17,7 @@ public class ContentAttributes {
 
 	private Long sold;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "attribute_id")
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "attribute_id", nullable = false)
 	private Attributes attribute;
 }

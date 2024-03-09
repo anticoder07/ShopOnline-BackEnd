@@ -2,6 +2,7 @@ package com.CstShop.ShopOnlineBackEndMain.auth;
 
 import com.CstShop.ShopOnlineBackEndMain.payload.reponse.ResponseHandler;
 import com.CstShop.ShopOnlineBackEndMain.payload.request.LogInRequest;
+import com.CstShop.ShopOnlineBackEndMain.payload.request.SignUpRequest;
 import com.CstShop.ShopOnlineBackEndMain.security.services.LogOutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,15 @@ public class AuthenticationController {
 	public ResponseEntity<Object> logIn(@RequestBody LogInRequest logInRequest){
 		try {
 			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, authenticationService.logIn(logInRequest));
+		} catch (Exception e) {
+			return ResponseHandler.generateErrorResponse(e);
+		}
+	}
+
+	@PostMapping("/sign-up")
+	public ResponseEntity<Object> signUp(@RequestBody SignUpRequest signUpRequest){
+		try {
+			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, authenticationService.signUp(signUpRequest));
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);
 		}

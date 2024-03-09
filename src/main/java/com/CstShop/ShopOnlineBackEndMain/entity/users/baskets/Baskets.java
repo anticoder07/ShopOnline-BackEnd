@@ -11,12 +11,13 @@ import java.util.List;
 public class Baskets {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long basketId;
+	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
-	private Users users;
+	private Users user;
 
-	@OneToMany(mappedBy = "baskets")
+	@OneToMany(mappedBy = "basket", fetch = FetchType.LAZY,
+					cascade = CascadeType.ALL)
 	private List<BasketProduct> basketProducts;
 }

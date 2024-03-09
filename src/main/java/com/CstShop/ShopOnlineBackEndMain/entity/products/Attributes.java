@@ -9,14 +9,15 @@ import java.util.List;
 public class Attributes {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long attributeId;
+	private Long id;
 
 	private String nameType;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_id")
-	private Products products;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "product_id", nullable = false)
+	private Products product;
 
-	@OneToMany(mappedBy = "attributes")
+	@OneToMany(mappedBy = "attribute", fetch = FetchType.LAZY,
+					cascade = CascadeType.ALL)
 	private List<ContentAttributes> contentAttributes;
 }

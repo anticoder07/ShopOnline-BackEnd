@@ -7,11 +7,11 @@ import jakarta.persistence.*;
 public class ProductTypes {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long productTypeId;
+	private Long id;
 
 	private String type;
 
 	@OneToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "product_id")
 	private Products product;
 }

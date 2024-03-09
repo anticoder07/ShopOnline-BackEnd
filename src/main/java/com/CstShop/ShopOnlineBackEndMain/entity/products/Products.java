@@ -6,11 +6,11 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 public class Products {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long productId;
+	private Long id;
 
 	private String name;
 
@@ -20,16 +20,18 @@ public class Products {
 
 	private Long quantity;
 
-	@OneToMany(mappedBy = "products")
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY,
+					cascade = CascadeType.ALL)
 	private List<Attributes> attributes;
 
 	@OneToOne
 	@JoinColumn(name = "description_id")
 	private Descriptions description;
 
-	@OneToOne(mappedBy = "users")
+	@OneToOne(mappedBy = "product")
 	private ProductTypes type;
 
-	@OneToMany(mappedBy = "products")
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY,
+					cascade = CascadeType.ALL)
 	private List<BasketProduct> basketProducts;
 }

@@ -12,16 +12,17 @@ import java.util.List;
 public class Bills {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long billId;
+	private Long id;
 
 	private Double total;
 
 	private Date purchaseDate;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private Users users;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id", nullable = false)
+	private Users user;
 
-	@OneToMany(mappedBy = "bills")
+	@OneToMany(mappedBy = "bill", fetch = FetchType.LAZY,
+					cascade = CascadeType.ALL)
 	private List<BillProduct> billProducts;
 }

@@ -2,6 +2,8 @@ package com.CstShop.ShopOnlineBackEndMain.payload.request;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class SignUpRequest {
 	private String username;
@@ -15,4 +17,6 @@ public class SignUpRequest {
 	private String sdt;
 
 	private String role;
+
+	private Date dateOfBirth;
 }

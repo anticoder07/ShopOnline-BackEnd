@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Descriptions {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long descriptionId;
+	private Long id;
 
 	private String content;
 

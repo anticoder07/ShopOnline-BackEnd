@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Token {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long tokenId;
+	private Long id;
 
 	private String token;
 
@@ -26,8 +26,8 @@ public class Token {
 
 	private boolean expired;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private Users users;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id", nullable = false)
+	private Users user;
 
 }
