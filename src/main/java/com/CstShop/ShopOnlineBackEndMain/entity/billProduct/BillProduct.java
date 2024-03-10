@@ -3,9 +3,11 @@ package com.CstShop.ShopOnlineBackEndMain.entity.billProduct;
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.bills.Bills;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
 @Table(name = "bill_products")
+@Getter
 public class BillProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

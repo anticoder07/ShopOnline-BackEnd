@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +27,9 @@ public class AuthenticationJwtFilter extends OncePerRequestFilter {
 
 	private final TokenRepo tokenRepo;
 
+	@Getter
+	private static UserDetails userDetailCirculate;
+
 	@Override
 	protected void doFilterInternal(
 					@NonNull HttpServletRequest request,
@@ -42,6 +46,7 @@ public class AuthenticationJwtFilter extends OncePerRequestFilter {
 			final String userEmail = jwtUtils.extractUserEmail(jwt);
 			if (userEmail == null || SecurityContextHolder.getContext().getAuthentication() == null) {
 				UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+				userDetailCirculate = userDetails;
 				var isTokenValid = tokenRepo.findByToken(jwt)
 								.map(t -> !t.isExpired() && !t.isRevoked())
 								.orElse(false);

@@ -3,12 +3,14 @@ package com.CstShop.ShopOnlineBackEndMain.entity.users.bills;
 import com.CstShop.ShopOnlineBackEndMain.entity.billProduct.BillProduct;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.Users;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "bills")
+@Getter
 public class Bills {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

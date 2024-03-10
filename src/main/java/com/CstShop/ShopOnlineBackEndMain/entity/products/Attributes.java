@@ -1,11 +1,13 @@
 package com.CstShop.ShopOnlineBackEndMain.entity.products;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "attributes")
+@Getter
 public class Attributes {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

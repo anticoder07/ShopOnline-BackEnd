@@ -1,4 +1,4 @@
-package com.CstShop.ShopOnlineBackEndMain.payload.reponse;
+package com.CstShop.ShopOnlineBackEndMain.payload.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

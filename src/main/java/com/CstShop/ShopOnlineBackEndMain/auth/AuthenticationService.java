@@ -3,7 +3,7 @@ package com.CstShop.ShopOnlineBackEndMain.auth;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.ETokenType;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.Token;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.Users;
-import com.CstShop.ShopOnlineBackEndMain.payload.reponse.AuthenticationResponse;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.AuthenticationResponse;
 import com.CstShop.ShopOnlineBackEndMain.payload.request.LogInRequest;
 import com.CstShop.ShopOnlineBackEndMain.payload.request.SignUpRequest;
 import com.CstShop.ShopOnlineBackEndMain.repository.userRepository.TokenRepo;
@@ -30,6 +30,7 @@ public class AuthenticationService {
 	private final PasswordEncoder passwordEncoder;
 
 	public AuthenticationResponse logIn(LogInRequest logInRequest) {
+		System.out.println(logInRequest);
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 						logInRequest.getUserEmail(),
 						logInRequest.getPassword()

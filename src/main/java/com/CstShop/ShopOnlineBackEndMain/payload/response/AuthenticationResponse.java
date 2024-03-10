@@ -1,4 +1,4 @@
-package com.CstShop.ShopOnlineBackEndMain.payload.reponse;
+package com.CstShop.ShopOnlineBackEndMain.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

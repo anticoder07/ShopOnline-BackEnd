@@ -1,6 +1,6 @@
 package com.CstShop.ShopOnlineBackEndMain.auth;
 
-import com.CstShop.ShopOnlineBackEndMain.payload.reponse.ResponseHandler;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.ResponseHandler;
 import com.CstShop.ShopOnlineBackEndMain.payload.request.LogInRequest;
 import com.CstShop.ShopOnlineBackEndMain.payload.request.SignUpRequest;
 import com.CstShop.ShopOnlineBackEndMain.security.services.LogOutService;

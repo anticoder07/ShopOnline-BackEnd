@@ -1,6 +1,6 @@
 package com.CstShop.ShopOnlineBackEndMain.entity.users;
 
-import com.CstShop.ShopOnlineBackEndMain.entity.users.baskets.Baskets;
+import com.CstShop.ShopOnlineBackEndMain.entity.basketProduct.BasketProduct;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.bills.Bills;
 import jakarta.persistence.*;
 import lombok.*;
@@ -42,7 +42,7 @@ public class Users {
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
 					cascade = CascadeType.ALL)
-	private List<Baskets> baskets;
+	private List<BasketProduct> basketProducts;
 
 	public Users(
 					String name,

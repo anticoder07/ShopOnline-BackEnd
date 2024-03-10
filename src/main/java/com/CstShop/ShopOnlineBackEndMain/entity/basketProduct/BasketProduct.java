@@ -1,7 +1,7 @@
 package com.CstShop.ShopOnlineBackEndMain.entity.basketProduct;
 
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
-import com.CstShop.ShopOnlineBackEndMain.entity.users.baskets.Baskets;
+import com.CstShop.ShopOnlineBackEndMain.entity.users.Users;
 import jakarta.persistence.*;
 
 @Entity
@@ -18,7 +18,7 @@ public class BasketProduct {
 	private Products product;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "basket_id", nullable = false)
-	private Baskets basket;
+	@JoinColumn(name = "user_id", nullable = false)
+	private Users users;
 
 }

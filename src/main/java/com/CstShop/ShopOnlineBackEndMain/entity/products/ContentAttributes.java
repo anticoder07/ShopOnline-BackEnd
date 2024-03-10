@@ -1,9 +1,11 @@
 package com.CstShop.ShopOnlineBackEndMain.entity.products;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "content_attribute")
+@Data
 public class ContentAttributes {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
