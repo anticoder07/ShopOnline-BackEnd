@@ -8,6 +8,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class ProductDto {
+	private Long id;
+
 	private byte[] picture;
 
 	private String name;

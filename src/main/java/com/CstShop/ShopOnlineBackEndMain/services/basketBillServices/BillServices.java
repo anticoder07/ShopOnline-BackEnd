@@ -4,6 +4,7 @@ import com.CstShop.ShopOnlineBackEndMain.entity.basketProduct.BasketProduct;
 import com.CstShop.ShopOnlineBackEndMain.entity.billProduct.BillProduct;
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.bills.Bills;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketProductDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.ProductBillItemDto;
 import com.CstShop.ShopOnlineBackEndMain.repository.billProductRepository.BillProductRepo;
@@ -30,17 +31,17 @@ public class BillServices implements BasketBillServices {
 	private final TakeProductServicesImpl takeProductServices;
 
 	@Override
-	public List<BasketProduct> addProductToBasket(Long id) {
+	public List<BasketProductDto> addProductToBasket(Long id, Long quantity) {
 		return null;
 	}
 
 	@Override
-	public List<BasketProduct> deleteProductIntoBasket(Long id) {
+	public List<BasketProductDto> deleteProductIntoBasket(Long id) {
 		return null;
 	}
 
 	@Override
-	public List<BasketProduct> seeAllProductFromBasket() {
+	public List<BasketProductDto> seeAllProductFromBasket() {
 		return null;
 	}
 

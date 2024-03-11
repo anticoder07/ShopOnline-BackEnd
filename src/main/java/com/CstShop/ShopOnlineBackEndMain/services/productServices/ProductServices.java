@@ -7,14 +7,21 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public interface TakeProductServices {
+public interface ProductServices {
 	List<ProductDto> makeDtoByProducts(List<Products> productsList);
 
 	List<ProductDto> takeProductsToHomePage();
 
 	List<ProductDto> takeProductsByType(String type);
 
-	List<ProductDto> takeInformationProductById(Long id);
+	ProductDto takeInformationProductById(Long id);
 
 	List<ProductDto> takeProductsRecommend(Products productCurrent);
+
+	ProductDto changeProduct(ProductDto productDto);
+
+	ProductDto addProduct(ProductDto productDto);
+
+	Boolean deleteProduct(ProductDto productDto);
 }
+

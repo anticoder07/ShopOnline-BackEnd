@@ -9,14 +9,16 @@ import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.Produc
 import com.CstShop.ShopOnlineBackEndMain.repository.productsRepository.AttributesRepo;
 import com.CstShop.ShopOnlineBackEndMain.repository.productsRepository.ContentAttributesRepo;
 import com.CstShop.ShopOnlineBackEndMain.repository.productsRepository.ProductsRepo;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class TakeProductServicesImpl implements TakeProductServices {
+@Service
+public class TakeProductServicesImpl implements ProductServices {
 	private final ProductsRepo productsRepository;
 
 	private final AttributesRepo attributesRepo;
@@ -46,11 +48,12 @@ public class TakeProductServicesImpl implements TakeProductServices {
 											}
 							);
 							ProductDto productDto = new ProductDto(
+											products.getId(),
 											products.getPicture(),
 											products.getName(),
 											products.getSold(),
 											products.getQuantity(),
-											products.getType().getType(),
+											products.getType().toString(),
 											products.getDescription().getContent(),
 											attributeDtoList
 							);
@@ -73,13 +76,28 @@ public class TakeProductServicesImpl implements TakeProductServices {
 	}
 
 	@Override
-	public List<ProductDto> takeInformationProductById(Long id) {
-		List<Products> productsList = productsRepository.findAllById(id);
-		return makeDtoByProducts(productsList);
+	public ProductDto takeInformationProductById(Long id) {
+		Products productsList = productsRepository.findAllById(id);
+		return makeDtoByProducts(Arrays.asList(productsList)).get(0);
 	}
 
 	@Override
 	public List<ProductDto> takeProductsRecommend(Products productCurrent) {
+		return null;
+	}
+
+	@Override
+	public ProductDto changeProduct(ProductDto productDto) {
+		return null;
+	}
+
+	@Override
+	public ProductDto addProduct(ProductDto productDto) {
+		return null;
+	}
+
+	@Override
+	public Boolean deleteProduct(ProductDto productDto) {
 		return null;
 	}
 }

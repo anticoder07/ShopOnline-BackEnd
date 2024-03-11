@@ -1,6 +1,7 @@
 package com.CstShop.ShopOnlineBackEndMain.services.basketBillServices;
 
 import com.CstShop.ShopOnlineBackEndMain.entity.basketProduct.BasketProduct;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketProductDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillDto;
 import org.springframework.stereotype.Service;
 
@@ -8,11 +9,11 @@ import java.util.List;
 
 @Service
 public interface BasketBillServices {
-	List<BasketProduct> addProductToBasket(Long id);
+	List<BasketProductDto> addProductToBasket(Long id, Long quantity);
 
-	List<BasketProduct> deleteProductIntoBasket(Long id);
+	List<BasketProductDto> deleteProductIntoBasket(Long id);
 
-	List<BasketProduct> seeAllProductFromBasket();
+	List<BasketProductDto> seeAllProductFromBasket();
 
 	List<BillDto> seeAllBill();
 }

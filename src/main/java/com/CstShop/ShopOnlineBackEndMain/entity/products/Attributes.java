@@ -1,13 +1,18 @@
 package com.CstShop.ShopOnlineBackEndMain.entity.products;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "attributes")
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Attributes {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +27,10 @@ public class Attributes {
 	@OneToMany(mappedBy = "attribute", fetch = FetchType.LAZY,
 					cascade = CascadeType.ALL)
 	private List<ContentAttributes> contentAttributes;
+
+	public Attributes(String nameType, Products product, List<ContentAttributes> contentAttributes) {
+		this.nameType = nameType;
+		this.product = product;
+		this.contentAttributes = contentAttributes;
+	}
 }

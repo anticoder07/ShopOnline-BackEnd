@@ -19,7 +19,7 @@ public class BillProduct {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "product_id", nullable = false)
-	private Products products;
+	private Products product;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "bill_id", nullable = false)

@@ -3,9 +3,15 @@ package com.CstShop.ShopOnlineBackEndMain.entity.basketProduct;
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.Users;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "basket_products")
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class BasketProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +25,11 @@ public class BasketProduct {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
-	private Users users;
+	private Users user;
 
+	public BasketProduct(Long quantity, Products product, Users users) {
+		this.quantity = quantity;
+		this.product = product;
+		this.user = users;
+	}
 }

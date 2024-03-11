@@ -1,4 +1,4 @@
-package com.CstShop.ShopOnlineBackEndMain.myController;
+package com.CstShop.ShopOnlineBackEndMain.myController.productController;
 
 import com.CstShop.ShopOnlineBackEndMain.payload.response.ResponseHandler;
 import com.CstShop.ShopOnlineBackEndMain.services.productServices.TakeProductServicesImpl;
