@@ -28,6 +28,8 @@ public class Products {
 
 	private Long quantity;
 
+	private Boolean state = true;
+
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY,
 					cascade = CascadeType.ALL)
 	private List<Attributes> attributes;
@@ -63,5 +65,6 @@ public class Products {
 		} else {
 			this.type = EProductTypes.SANPHAMKHAC;
 		}
+		this.state = productDto.getState();
 	}
 }

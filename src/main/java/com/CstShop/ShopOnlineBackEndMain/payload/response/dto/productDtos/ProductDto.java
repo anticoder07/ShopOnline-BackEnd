@@ -22,5 +22,7 @@ public class ProductDto {
 
 	private String description;
 
+	private Boolean state;
+
 	private List<AttributeDto> productTypeList;
 }

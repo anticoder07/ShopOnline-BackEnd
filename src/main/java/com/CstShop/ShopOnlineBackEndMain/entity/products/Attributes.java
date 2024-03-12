@@ -33,4 +33,9 @@ public class Attributes {
 		this.product = product;
 		this.contentAttributes = contentAttributes;
 	}
+
+	public Attributes(String nameType, Products product) {
+		this.nameType = nameType;
+		this.product = product;
+	}
 }

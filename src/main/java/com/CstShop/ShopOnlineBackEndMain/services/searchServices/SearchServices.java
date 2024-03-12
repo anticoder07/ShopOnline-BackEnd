@@ -11,8 +11,6 @@ import java.util.List;
 public interface SearchServices {
 	List<ProductDto> searchProduct(String input);
 
-	List<BillDto> searchProductFromBill(String input);
-
 	List<BasketProductDto> searchProductFromBasket(String input);
 
 }

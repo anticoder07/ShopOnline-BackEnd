@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface BasketBillServices {
 	List<BasketProductDto> addProductToBasket(Long id, Long quantity);
 

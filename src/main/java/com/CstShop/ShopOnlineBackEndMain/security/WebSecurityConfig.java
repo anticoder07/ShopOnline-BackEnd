@@ -50,7 +50,8 @@ public PasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();
 						.exceptionHandling(exception -> exception.authenticationEntryPoint(unAuthorizationHandler))
 						.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 						.authorizeHttpRequests(request -> request
-										.requestMatchers("/api/auth/*").permitAll()
+										.requestMatchers("/api/auth/*", "api/take/product/*")
+										.permitAll()
 										.anyRequest().authenticated())
 						.authenticationProvider(daoAuthenticationProvider())
 						.addFilterBefore(authenticationJwtFilter, UsernamePasswordAuthenticationFilter.class);

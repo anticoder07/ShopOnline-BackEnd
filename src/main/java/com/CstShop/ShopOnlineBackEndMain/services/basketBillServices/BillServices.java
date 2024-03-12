@@ -3,24 +3,35 @@ package com.CstShop.ShopOnlineBackEndMain.services.basketBillServices;
 import com.CstShop.ShopOnlineBackEndMain.entity.basketProduct.BasketProduct;
 import com.CstShop.ShopOnlineBackEndMain.entity.billProduct.BillProduct;
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
+import com.CstShop.ShopOnlineBackEndMain.entity.users.Users;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.bills.Bills;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketProductDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.ProductBillItemDto;
 import com.CstShop.ShopOnlineBackEndMain.repository.billProductRepository.BillProductRepo;
 import com.CstShop.ShopOnlineBackEndMain.repository.productsRepository.ProductsRepo;
+import com.CstShop.ShopOnlineBackEndMain.repository.userRepository.UsersRepo;
 import com.CstShop.ShopOnlineBackEndMain.repository.userRepository.billsRepo.BillsRepo;
-import com.CstShop.ShopOnlineBackEndMain.services.UserCirculate;
+import com.CstShop.ShopOnlineBackEndMain.security.jwt.AuthenticationJwtFilter;
 import com.CstShop.ShopOnlineBackEndMain.services.productServices.TakeProductServicesImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Service
 public class BillServices implements BasketBillServices {
-	private final UserCirculate userCirculate;
+
+	private final UsersRepo usersRepository;
+	private Users getUser() {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return usersRepository.findByUserEmail(userDetails.getUsername()).orElseThrow();
+	}
 
 	private final BillsRepo billsRepository;
 
@@ -48,7 +59,7 @@ public class BillServices implements BasketBillServices {
 	@Override
 	public List<BillDto> seeAllBill() {
 		List<BillDto> billDtoList = new ArrayList<>();
-		List<Bills> billsList = billsRepository.findBillsByUser(userCirculate.getValue());
+		List<Bills> billsList = billsRepository.findBillsByUser(getUser());
 		billsList.forEach((billItem) -> {
 
 							List<BillProduct> billProductList = billProductRepository.findAllByBill(billItem);

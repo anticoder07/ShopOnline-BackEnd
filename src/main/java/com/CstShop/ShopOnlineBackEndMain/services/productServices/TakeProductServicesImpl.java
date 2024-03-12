@@ -55,6 +55,7 @@ public class TakeProductServicesImpl implements ProductServices {
 											products.getQuantity(),
 											products.getType().toString(),
 											products.getDescription().getContent(),
+											products.getState(),
 											attributeDtoList
 							);
 							productDtoList.add(productDto);

@@ -15,7 +15,7 @@ public class TakeProductsController {
 	private final TakeProductServicesImpl takeProductServices;
 
 	@GetMapping("/home-page")
-	public ResponseEntity<Object> takeProductHomePage(){
+	public ResponseEntity<Object> takeProductHomePage() {
 		try {
 			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, takeProductServices.takeProductsToHomePage());
 		} catch (Exception e) {
@@ -24,7 +24,7 @@ public class TakeProductsController {
 	}
 
 	@PostMapping("/by/type")
-	public ResponseEntity<Object> takeProductsByType(@RequestBody String type){
+	public ResponseEntity<Object> takeProductsByType(@RequestBody String type) {
 		try {
 			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, takeProductServices.takeProductsByType(type));
 		} catch (Exception e) {
@@ -33,7 +33,7 @@ public class TakeProductsController {
 	}
 
 	@PostMapping("/by/id")
-	public ResponseEntity<Object> takeProductsByType(@RequestBody long id){
+	public ResponseEntity<Object> takeProductsByType(@RequestBody long id) {
 		try {
 			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, takeProductServices.takeInformationProductById(id));
 		} catch (Exception e) {

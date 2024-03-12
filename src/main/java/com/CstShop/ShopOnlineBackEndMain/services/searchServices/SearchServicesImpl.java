@@ -2,18 +2,20 @@ package com.CstShop.ShopOnlineBackEndMain.services.searchServices;
 
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketProductDto;
-import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.ProductDto;
 import com.CstShop.ShopOnlineBackEndMain.repository.productsRepository.ProductsRepo;
-import com.CstShop.ShopOnlineBackEndMain.repository.userRepository.billsRepo.BillsRepo;
+import com.CstShop.ShopOnlineBackEndMain.services.basketBillServices.BasketServices;
 import com.CstShop.ShopOnlineBackEndMain.services.productServices.TakeProductServicesImpl;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class SearchServicesImpl implements SearchServices{
+public class SearchServicesImpl implements SearchServices {
 	private final ProductsRepo productsRepository;
+
+	private final BasketServices basketServices;
 
 	private final TakeProductServicesImpl takeProductServices;
 
@@ -24,13 +26,17 @@ public class SearchServicesImpl implements SearchServices{
 	}
 
 	@Override
-	public List<BillDto> searchProductFromBill(String input) {
-		List<Products> productsList = productsRepository.searchProductsByName(input);
-		return null;
-	}
-
-	@Override
 	public List<BasketProductDto> searchProductFromBasket(String input) {
-		return null;
+		List<BasketProductDto> basketProductDtoList = basketServices.seeAllProductFromBasket();
+		List<BasketProductDto> basketProductDtoListSearch = new ArrayList<>();
+		basketProductDtoList.forEach(
+						basketProductDto -> {
+							if (basketProductDto.getProductDto().getName().contains(input)) {
+								basketProductDtoListSearch.add(basketProductDto);
+							}
+						}
+		);
+
+		return basketProductDtoListSearch;
 	}
 }
