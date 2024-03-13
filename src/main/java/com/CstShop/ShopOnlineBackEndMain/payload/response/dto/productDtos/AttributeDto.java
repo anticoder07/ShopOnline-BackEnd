@@ -8,6 +8,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class AttributeDto {
+	private Long id;
+
 	private String type;
 
 	List<ProductTypeItemDto> productTypeItemDtoList;

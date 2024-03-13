@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("api")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 @RequiredArgsConstructor
@@ -24,9 +24,9 @@ public class BasketBillController {
 	private final BillServices billServices;
 
 	@PostMapping("/basket/add")
-	public ResponseEntity<Object> addProductToBasket(@RequestBody Long id, @RequestBody Long quantity) {
+	public ResponseEntity<Object> addProductToBasket(@RequestParam Long id, @RequestParam Long q, @RequestParam Long t) {
 		try {
-			List<BasketProductDto> productDtoList = basketServices.addProductToBasket(id, quantity);
+			List<BasketProductDto> productDtoList = basketServices.addProductToBasket(id, q, t);
 			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, productDtoList);
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);

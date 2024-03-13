@@ -38,13 +38,15 @@ public class TakeProductServicesImpl implements ProductServices {
 												List<ProductTypeItemDto> productTypeItemDtoList = new ArrayList<>();
 												contentAttributesList.forEach(contentAttributes -> {
 													productTypeItemDtoList.add(new ProductTypeItemDto(
+																	contentAttributes.getId(),
 																	contentAttributes.getPicture(),
 																	contentAttributes.getPrice(),
 																	contentAttributes.getQuantity(),
-																	contentAttributes.getSold()
+																	contentAttributes.getSold(),
+																	contentAttributes.getContent()
 													));
 												});
-												attributeDtoList.add(new AttributeDto(attributes.getNameType(), productTypeItemDtoList));
+												attributeDtoList.add(new AttributeDto(attributes.getId(), attributes.getNameType(), productTypeItemDtoList));
 											}
 							);
 							ProductDto productDto = new ProductDto(
@@ -66,7 +68,7 @@ public class TakeProductServicesImpl implements ProductServices {
 
 	@Override
 	public List<ProductDto> takeProductsToHomePage() {
-		List<Products> productsList = productsRepository.findAllProducts();
+		List<Products> productsList = productsRepository.findAllByState(true);
 		return makeDtoByProducts(productsList);
 	}
 
@@ -98,7 +100,7 @@ public class TakeProductServicesImpl implements ProductServices {
 	}
 
 	@Override
-	public Boolean deleteProduct(ProductDto productDto) {
+	public Boolean deleteProduct(Long id) {
 		return null;
 	}
 }

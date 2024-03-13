@@ -10,14 +10,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/profile")
+@RequestMapping("api/profile")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 @RequiredArgsConstructor
 public class ProfileController {
 	private final ProfileServicesImpl profileServices;
 
-	@GetMapping("see")
+	@GetMapping("/see")
 	public ResponseEntity<Object> seeProfile() {
 		try {
 			ProfileDto profileDto = profileServices.takeProfile();
@@ -27,7 +27,7 @@ public class ProfileController {
 		}
 	}
 
-	@PostMapping("change/name")
+	@PostMapping("/change/name")
 	public ResponseEntity<Object> changeNameProfile(@RequestBody String name) {
 		try {
 			ProfileDto profileDto = profileServices.changeName(name);
@@ -37,7 +37,7 @@ public class ProfileController {
 		}
 	}
 
-	@PostMapping("change/password")
+	@PostMapping("/change/password")
 	public ResponseEntity<Object> changePasswordProfile(@RequestBody String pwd) {
 		try {
 			ProfileDto profileDto = profileServices.changePassword(pwd);

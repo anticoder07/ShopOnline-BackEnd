@@ -38,4 +38,10 @@ public class Attributes {
 		this.nameType = nameType;
 		this.product = product;
 	}
+
+	public Attributes(String nameType, List<ContentAttributes> contentAttributes) {
+		this.nameType = nameType;
+		this.contentAttributes = contentAttributes;
+	}
+
 }

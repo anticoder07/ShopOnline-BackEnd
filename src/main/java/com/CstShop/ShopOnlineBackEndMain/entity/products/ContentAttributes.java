@@ -23,14 +23,19 @@ public class ContentAttributes {
 
 	private Long sold;
 
+	private String content;
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "attribute_id", nullable = false)
 	private Attributes attribute;
 
-	public ContentAttributes(byte[] picture, Double price, Long quantity, Long sold) {
+	public ContentAttributes(byte[] picture, Double price, Long quantity, Long sold, String content) {
 		this.picture = picture;
 		this.price = price;
 		this.quantity = quantity;
 		this.sold = sold;
+		this.content = content;
 	}
+
+
 }

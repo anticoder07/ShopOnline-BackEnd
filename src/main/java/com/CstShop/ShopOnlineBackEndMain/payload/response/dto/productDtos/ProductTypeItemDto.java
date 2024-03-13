@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ProductTypeItemDto {
+	private Long id;
+
 	private byte[] picture;
 
 	private Double price;
@@ -13,4 +15,6 @@ public class ProductTypeItemDto {
 	private Long quantity;
 
 	private Long sold;
+
+	private String content;
 }

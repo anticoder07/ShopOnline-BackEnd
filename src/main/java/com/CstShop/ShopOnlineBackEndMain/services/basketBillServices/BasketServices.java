@@ -1,12 +1,14 @@
 package com.CstShop.ShopOnlineBackEndMain.services.basketBillServices;
 
 import com.CstShop.ShopOnlineBackEndMain.entity.basketProduct.BasketProduct;
+import com.CstShop.ShopOnlineBackEndMain.entity.products.ContentAttributes;
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.Users;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketProductDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.ProductDto;
 import com.CstShop.ShopOnlineBackEndMain.repository.basketProductRepository.BasketProductRepo;
+import com.CstShop.ShopOnlineBackEndMain.repository.productsRepository.ContentAttributesRepo;
 import com.CstShop.ShopOnlineBackEndMain.repository.productsRepository.ProductsRepo;
 import com.CstShop.ShopOnlineBackEndMain.repository.userRepository.UsersRepo;
 import com.CstShop.ShopOnlineBackEndMain.services.productServices.TakeProductServicesImpl;
@@ -16,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -35,13 +37,15 @@ public class BasketServices implements BasketBillServices {
 
 	private final TakeProductServicesImpl takeProductServices;
 
+	private final ContentAttributesRepo contentAttributesRepository;
+
 
 	@Override
-	public List<BasketProductDto> addProductToBasket(Long id, Long quantity) {
+	public List<BasketProductDto> addProductToBasket(Long id, Long quantity, Long contentAttributeId) {
 		Products products = productsRepository.findAllById(id);
 		if (products == null)
 			return null;
-		BasketProduct basketProduct = new BasketProduct(quantity, products, getUser());
+		BasketProduct basketProduct = new BasketProduct(quantity, products, getUser(), contentAttributeId);
 		basketProductRepository.save(basketProduct);
 		return seeAllProductFromBasket();
 	}
@@ -63,11 +67,14 @@ public class BasketServices implements BasketBillServices {
 		basketProductList.forEach(
 						basketProduct -> {
 							Products products = basketProduct.getProduct();
-							ProductDto productDto = takeProductServices.makeDtoByProducts(Arrays.asList(products)).get(0);
+							ProductDto productDto = takeProductServices.makeDtoByProducts(Collections.singletonList(products)).get(0);
+							ContentAttributes ca = contentAttributesRepository.findById(basketProduct.getContentAttributeId()).orElseThrow();
 							basketProductDtoList.add(
 											new BasketProductDto(
 															productDto,
-															basketProduct.getQuantity()
+															basketProduct.getQuantity(),
+															ca.getContent(),
+															basketProduct.getContentAttributeId()
 											)
 							);
 						}

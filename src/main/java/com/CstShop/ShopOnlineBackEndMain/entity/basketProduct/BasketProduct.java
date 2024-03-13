@@ -19,6 +19,8 @@ public class BasketProduct {
 
 	private Long quantity;
 
+	private Long contentAttributeId;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id")
 	private Products product;
@@ -27,9 +29,10 @@ public class BasketProduct {
 	@JoinColumn(name = "user_id", nullable = false)
 	private Users user;
 
-	public BasketProduct(Long quantity, Products product, Users users) {
+	public BasketProduct(Long quantity, Products product, Users users, Long contentAttributeId) {
 		this.quantity = quantity;
 		this.product = product;
 		this.user = users;
+		this.contentAttributeId = contentAttributeId;
 	}
 }

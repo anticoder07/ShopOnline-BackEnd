@@ -10,4 +10,8 @@ public class BasketProductDto {
 	private ProductDto productDto;
 
 	private Long quantity;
+
+	private String type;
+
+	private Long typeId;
 }

@@ -22,6 +22,6 @@ public interface ProductServices {
 
 	ProductDto addProduct(ProductDto productDto);
 
-	Boolean deleteProduct(ProductDto productDto);
+	Boolean deleteProduct(Long id);
 }
 

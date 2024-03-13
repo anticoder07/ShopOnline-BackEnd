@@ -23,6 +23,8 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 
 	List<Products> findAllByType(EProductTypes type);
 
+	List<Products> findAllByState(Boolean state);
+
 	Products findAllById(long id);
 
 	Products findAllByBillProducts(BillProduct billProduct);
@@ -46,4 +48,10 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 					);
 
 	List<Products> searchProductsByName(String name);
+
+	@Modifying
+	@Query("""
+							update Products p set p.state = :state where p.id = :id
+					""")
+	void updateState(@Param("id") Long id, @Param("state") Boolean state);
 }
