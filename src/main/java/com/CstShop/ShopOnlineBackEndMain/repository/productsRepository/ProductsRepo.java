@@ -18,9 +18,6 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 	@Query("SELECT p FROM Products p")
 	List<Products> findAllProducts();
 
-//	@Query("select p from Products p order by rand() limit :quantity")
-//	List<Products> findRandomProduct(@Param("quantity") long quantity);
-
 	List<Products> findAllByType(EProductTypes type);
 
 	List<Products> findAllByState(Boolean state);
@@ -28,10 +25,6 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 	Products findAllById(long id);
 
 	Products findAllByBillProducts(BillProduct billProduct);
-
-//	@Modifying
-//	@Query("update Products p set p.name = :name, p.sold = :sold, p.quantity = :quantity, p.type = :type, p.description = :description where p.id = :id")
-//	void alterProduct(@Param("id") Long id, @Param("name") String name, @Param("sold") Long sold, @Param("quantity") Long quantity, @Param("type") String type, @Param("description") String description);
 
 	@Modifying
 	@Query("""

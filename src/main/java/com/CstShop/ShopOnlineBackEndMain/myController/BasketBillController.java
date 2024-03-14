@@ -24,20 +24,18 @@ public class BasketBillController {
 	private final BillServices billServices;
 
 	@PostMapping("/basket/add")
-	public ResponseEntity<Object> addProductToBasket(@RequestParam Long id, @RequestParam Long q, @RequestParam Long t) {
+	public ResponseEntity<Object> addProductToBasket(@RequestParam("i") Long id, @RequestParam("q") Long quantity, @RequestParam("t") Long type) {
 		try {
-			List<BasketProductDto> productDtoList = basketServices.addProductToBasket(id, q, t);
-			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, productDtoList);
+			return basketServices.addProductToBasket(id, quantity, type);
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);
 		}
 	}
 
 	@PostMapping("basket/delete")
-	public ResponseEntity<Object> deleteProductIntoBasket(@RequestBody Long id) {
+	public ResponseEntity<Object> deleteProductIntoBasket(@RequestParam("i") Long id) {
 		try {
-			List<BasketProductDto> productDtoList = basketServices.deleteProductIntoBasket(id);
-			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, productDtoList);
+			return basketServices.deleteProductIntoBasket(id);
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);
 		}
@@ -58,6 +56,26 @@ public class BasketBillController {
 		try {
 			List<BillDto> billDtoList = billServices.seeAllBill();
 			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, billDtoList);
+		} catch (Exception e) {
+			return ResponseHandler.generateErrorResponse(e);
+		}
+	}
+
+	@PostMapping("bill/set-state/admin")
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	public ResponseEntity<Object> setStateAdmin(@RequestBody Long id, @RequestBody String state){
+		try {
+			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, billServices.setStateAdmin(id, state));
+		} catch (Exception e) {
+			return ResponseHandler.generateErrorResponse(e);
+		}
+	}
+
+	@PostMapping("bill/set-state")
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	public ResponseEntity<Object> setStateUser(@RequestBody Long id, @RequestBody String state){
+		try {
+			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, billServices.setStateUser(id, state));
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);
 		}

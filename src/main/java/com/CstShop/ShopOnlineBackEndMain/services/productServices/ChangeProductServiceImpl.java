@@ -160,7 +160,7 @@ public class ChangeProductServiceImpl implements ProductServices {
 		}
 
 		productsRepository.save(products);
-		return takeProductServices.makeDtoByProducts(Arrays.asList(products)).get(0);
+		return takeProductServices.makeDtoByProducts(List.of(products)).get(0);
 	}
 
 	@Override

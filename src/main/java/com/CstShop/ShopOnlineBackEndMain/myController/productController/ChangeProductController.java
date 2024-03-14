@@ -38,7 +38,7 @@ public class ChangeProductController {
 	}
 
 	@PostMapping("/delete")
-	public ResponseEntity<Object> deleteProduct(@RequestBody Long id){
+	public ResponseEntity<Object> deleteProduct(@RequestParam("i") Long id){
 		try {
 			boolean check = changeProductService.deleteProduct(id);
 			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, check);

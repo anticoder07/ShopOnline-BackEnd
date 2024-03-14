@@ -23,19 +23,19 @@ public class TakeProductsController {
 		}
 	}
 
-	@PostMapping("/by/type")
-	public ResponseEntity<Object> takeProductsByType(@RequestParam String t) {
+	@GetMapping("/by/type")
+	public ResponseEntity<Object> takeProductsByType(@RequestParam("t") String type) {
 		try {
-			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, takeProductServices.takeProductsByType(t));
+			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, takeProductServices.takeProductsByType(type));
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);
 		}
 	}
 
-	@PostMapping("/by/id")
-	public ResponseEntity<Object> takeProductsByType(@RequestBody long i) {
+	@GetMapping("/by/id")
+	public ResponseEntity<Object> takeProductsByType(@RequestParam("i") long id) {
 		try {
-			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, takeProductServices.takeInformationProductById(i));
+			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, takeProductServices.takeInformationProductById(id));
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);
 		}

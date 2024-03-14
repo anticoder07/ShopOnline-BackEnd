@@ -12,26 +12,26 @@ import java.util.Date;
 @SpringBootApplication
 @RequiredArgsConstructor
 public class ShopOnlineBackEndMainApplication
-				implements CommandLineRunner
+//				implements CommandLineRunner
 {
 
-	private final UsersRepo usersRepository;
+//	private final UsersRepo usersRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ShopOnlineBackEndMainApplication.class, args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-		Date birthDayUser = new Date();
-		Users users = new Users(
-						"caobahuong",
-						"caobahuong@gmail.com",
-						"12345678",
-						"0946483158",
-						birthDayUser,
-						"user"
-		);
-		usersRepository.save(users);
-	}
+//	@Override
+//	public void run(String... args) throws Exception {
+//		Date birthDayUser = new Date();
+//		Users users = new Users(
+//						"caobahuong",
+//						"caobahuong@gmail.com",
+//						"12345678",
+//						"0946483158",
+//						birthDayUser,
+//						"user"
+//		);
+//		usersRepository.save(users);
+//	}
 }

@@ -27,8 +27,11 @@ public class ProfileServicesImpl implements ProfileServices {
 
 	@Override
 	public ProfileDto changeName(String name) {
+		System.out.println(name);
 		Long idCirculate = getUser().getId();
-		Users user = usersRepository.changeName(idCirculate, name);
+		usersRepository.changeName(idCirculate, name);
+		Users user = usersRepository.findById(idCirculate).orElseThrow();
+		System.out.println(user);
 		ProfileDto profile = new ProfileDto(user);
 		return profile;
 	}
@@ -36,7 +39,8 @@ public class ProfileServicesImpl implements ProfileServices {
 	@Override
 	public ProfileDto changePassword(String password) {
 		Long idCirculate = getUser().getId();
-		Users user = usersRepository.changeName(idCirculate, password);
+		usersRepository.changeName(idCirculate, password);
+		Users user = usersRepository.findById(idCirculate).orElseThrow();
 		ProfileDto profile = new ProfileDto(user);
 		return profile;
 	}

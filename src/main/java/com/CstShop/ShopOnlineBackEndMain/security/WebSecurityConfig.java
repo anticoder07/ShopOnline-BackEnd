@@ -28,11 +28,11 @@ public class WebSecurityConfig {
 	private final AuthenticationJwtFilter authenticationJwtFilter;
 
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration auth) throws Exception{
-		return  auth.getAuthenticationManager();
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration auth) throws Exception {
+		return auth.getAuthenticationManager();
 	}
 
-	public DaoAuthenticationProvider daoAuthenticationProvider(){
+	public DaoAuthenticationProvider daoAuthenticationProvider() {
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -40,7 +40,8 @@ public class WebSecurityConfig {
 	}
 
 	@Bean
-public PasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
@@ -50,12 +51,17 @@ public PasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();
 						.exceptionHandling(exception -> exception.authenticationEntryPoint(unAuthorizationHandler))
 						.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 						.authorizeHttpRequests(request -> request
-										.requestMatchers("/api/auth/*", "api/take/product/*")
+										.requestMatchers(
+														"/api/auth/*",
+														"api/take/product/*",
+														"api/take/product/by/type",
+														"api/take/product/by/id"
+										)
 										.permitAll()
 										.anyRequest().authenticated())
 						.authenticationProvider(daoAuthenticationProvider())
 						.addFilterBefore(authenticationJwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-		return (SecurityFilterChain)http.build();
+		return (SecurityFilterChain) http.build();
 	}
 }

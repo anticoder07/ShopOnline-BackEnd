@@ -2,6 +2,7 @@ package com.CstShop.ShopOnlineBackEndMain.services.productServices;
 
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Attributes;
 import com.CstShop.ShopOnlineBackEndMain.entity.products.ContentAttributes;
+import com.CstShop.ShopOnlineBackEndMain.entity.products.EProductTypes;
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.AttributeDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.ProductDto;
@@ -73,8 +74,20 @@ public class TakeProductServicesImpl implements ProductServices {
 	}
 
 	@Override
-	public List<ProductDto> takeProductsByType(String type) {
-		List<Products> productsList = productsRepository.findAllByType(null);
+	public List<ProductDto> takeProductsByType(String typeInput) {
+		EProductTypes type;
+		if (typeInput.equals("dien-thoai-phu-kien")) {
+			type = EProductTypes.DIENTHOAIPHUKIEN;
+		} else if (typeInput.equals("may-tinh-laptop")) {
+			type = EProductTypes.MAYTINHLAPTOP;
+		} else if (typeInput.equals("thoi-trang-nam-nu")) {
+			type = EProductTypes.THOITRANGNAMNU;
+		} else if (typeInput.equals("my-pham-chinh-hang")) {
+			type = EProductTypes.MYPHAMCHINHHANG;
+		} else {
+			type = EProductTypes.SANPHAMKHAC;
+		}
+		List<Products> productsList = productsRepository.findAllByType(type);
 		return makeDtoByProducts(productsList);
 	}
 

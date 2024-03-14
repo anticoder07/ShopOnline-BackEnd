@@ -14,7 +14,9 @@ public class BillDto {
 
 	private Double total = 0.0;
 
-	public BillDto(List<ProductBillItemDto> productsList, Date purchasedDate) {
+	private String stateBill;
+
+	public BillDto(List<ProductBillItemDto> productsList, Date purchasedDate, String stateBill) {
 		this.productsList = productsList;
 		this.purchasedDate = purchasedDate;
 		Double tempPrice = 0.0;
@@ -22,5 +24,6 @@ public class BillDto {
 			tempPrice += product.getOldPrice();
 		}
 		this.total = tempPrice;
+		this.stateBill = stateBill;
 	}
 }

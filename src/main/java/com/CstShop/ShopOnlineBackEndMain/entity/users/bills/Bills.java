@@ -3,14 +3,14 @@ package com.CstShop.ShopOnlineBackEndMain.entity.users.bills;
 import com.CstShop.ShopOnlineBackEndMain.entity.billProduct.BillProduct;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.Users;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "bills")
-@Getter
+@Data
 public class Bills {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,9 @@ public class Bills {
 	private Double total;
 
 	private Date purchaseDate;
+
+	@Enumerated(EnumType.STRING)
+	private EBillType stateBill;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
