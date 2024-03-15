@@ -17,10 +17,13 @@ public class ProfileDto {
 
 	private String userEmail;
 
+	private String avatar;
+
 	public ProfileDto(Users users) {
 		this.name = users.getName();
 		this.phoneNumber = users.getPhoneNumber();
 		this.dateOfBirth = users.getDateOfBirth();
 		this.userEmail = users.getUserEmail();
+		this.avatar = users.getAvatar();
 	}
 }

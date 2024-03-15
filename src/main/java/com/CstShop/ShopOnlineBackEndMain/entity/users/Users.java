@@ -29,6 +29,8 @@ public class Users {
 
 	private Date dateOfBirth;
 
+	private String avatar;
+
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
 	private ERole role;
@@ -51,7 +53,9 @@ public class Users {
 					String password,
 					String phoneNumber,
 					Date dateOfBirth,
-					String role) {
+					String role,
+					String avatar
+	) {
 		this.name = name;
 		this.userEmail = userEmail;
 		this.password = password;
@@ -62,5 +66,9 @@ public class Users {
 		else if (role.equals("user")) {
 			setRole(ERole.USER);
 		}
+		if (role == null){
+			setRole(ERole.USER);
+		}
+		this.avatar = avatar;
 	}
 }

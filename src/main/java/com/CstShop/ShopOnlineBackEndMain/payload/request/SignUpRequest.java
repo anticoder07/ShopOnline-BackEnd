@@ -38,4 +38,6 @@ public class SignUpRequest {
 
 	@NotBlank(message = "date of birth cannot blank")
 	private Date dateOfBirth;
+
+	private String avatar = null;
 }

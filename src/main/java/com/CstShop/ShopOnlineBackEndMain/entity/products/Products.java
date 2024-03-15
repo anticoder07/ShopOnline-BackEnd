@@ -24,7 +24,7 @@ public class Products {
 
 	private String name;
 
-	private byte[] picture;
+	private String picture;
 
 	private Long sold;
 

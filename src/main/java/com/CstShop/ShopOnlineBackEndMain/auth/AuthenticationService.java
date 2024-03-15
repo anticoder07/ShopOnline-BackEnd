@@ -48,6 +48,7 @@ public class AuthenticationService {
 	}
 
 	public AuthenticationResponse signUp(SignUpRequest signUpRequest) {
+		System.out.println(signUpRequest);
 		if (userRepository.existsByUserEmail(signUpRequest.getEmail())){
 			return null;
 		}
@@ -57,13 +58,15 @@ public class AuthenticationService {
 						passwordEncoder.encode(signUpRequest.getPassword()),
 						signUpRequest.getSdt(),
 						signUpRequest.getDateOfBirth(),
-						signUpRequest.getRole()
+						signUpRequest.getRole(),
+						signUpRequest.getAvatar()
 		);
 		UserDetailsImpl userDetails = new UserDetailsImpl(users);
 		userRepository.save(users);
 		var jwtToken = jwtUtils.generateToken(userDetails);
 		var refreshToken = jwtUtils.generateRefreshToken(userDetails);
 		saveUserToken(userDetails, jwtToken);
+		System.out.println(userDetails);
 		return new AuthenticationResponse(
 						jwtToken,
 						refreshToken

@@ -33,7 +33,7 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 	void alterProduct(
 					@Param("id") Long id,
 					@Param("name") String name,
-					@Param("picture") byte[] picture,
+					@Param("picture") String picture,
 					@Param("sold") Long sold,
 					@Param("quantity") Long quantity,
 					@Param("typeProduct") EProductTypes type,

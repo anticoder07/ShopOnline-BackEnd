@@ -10,7 +10,7 @@ import java.util.List;
 public class ProductDto {
 	private Long id;
 
-	private byte[] picture;
+	private String picture;
 
 	private String name;
 
@@ -23,6 +23,8 @@ public class ProductDto {
 	private String description;
 
 	private Boolean state;
+
+	private Double priceMin;
 
 	private List<AttributeDto> productTypeList;
 }

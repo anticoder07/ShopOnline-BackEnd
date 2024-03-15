@@ -33,6 +33,8 @@ public class TakeProductServicesImpl implements ProductServices {
 						(products) -> {
 							List<Attributes> attributesList = attributesRepo.findAllByProduct(products);
 							List<AttributeDto> attributeDtoList = new ArrayList<>();
+							final double[] priceMin = {Double.MAX_VALUE};
+
 							attributesList.forEach(
 											(attributes) -> {
 												List<ContentAttributes> contentAttributesList = contentAttributesRepo.findAllByAttribute(attributes);
@@ -46,10 +48,13 @@ public class TakeProductServicesImpl implements ProductServices {
 																	contentAttributes.getSold(),
 																	contentAttributes.getContent()
 													));
+													if (priceMin[0] > contentAttributes.getPrice()) // Sử dụng priceMin[0]
+														priceMin[0] = contentAttributes.getPrice();
 												});
 												attributeDtoList.add(new AttributeDto(attributes.getId(), attributes.getNameType(), productTypeItemDtoList));
 											}
 							);
+
 							ProductDto productDto = new ProductDto(
 											products.getId(),
 											products.getPicture(),
@@ -59,6 +64,7 @@ public class TakeProductServicesImpl implements ProductServices {
 											products.getType().toString(),
 											products.getDescription().getContent(),
 											products.getState(),
+											priceMin[0],
 											attributeDtoList
 							);
 							productDtoList.add(productDto);
