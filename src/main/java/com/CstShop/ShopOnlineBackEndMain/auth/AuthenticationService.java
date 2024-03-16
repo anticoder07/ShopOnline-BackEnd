@@ -30,7 +30,6 @@ public class AuthenticationService {
 	private final PasswordEncoder passwordEncoder;
 
 	public AuthenticationResponse logIn(LogInRequest logInRequest) {
-		System.out.println(logInRequest);
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 						logInRequest.getUserEmail(),
 						logInRequest.getPassword()
@@ -48,7 +47,6 @@ public class AuthenticationService {
 	}
 
 	public AuthenticationResponse signUp(SignUpRequest signUpRequest) {
-		System.out.println(signUpRequest);
 		if (userRepository.existsByUserEmail(signUpRequest.getEmail())){
 			return null;
 		}
@@ -66,7 +64,6 @@ public class AuthenticationService {
 		var jwtToken = jwtUtils.generateToken(userDetails);
 		var refreshToken = jwtUtils.generateRefreshToken(userDetails);
 		saveUserToken(userDetails, jwtToken);
-		System.out.println(userDetails);
 		return new AuthenticationResponse(
 						jwtToken,
 						refreshToken

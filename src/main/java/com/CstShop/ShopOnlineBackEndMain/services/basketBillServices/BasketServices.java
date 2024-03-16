@@ -49,11 +49,11 @@ public class BasketServices implements BasketBillServices {
 
 	@Override
 	public ResponseEntity<Object> addProductToBasket(Long id, Long quantity, Long contentAttributeId) {
-		Products products = productsRepository.findAllById(id);
+		Products products = productsRepository.findById(id).orElseThrow();
 		if (products == null)
 			return ResponseHandler.generateErrorResponse(new MessageError("Insufficient quantity of products"));
 		ContentAttributes contentAttributes = contentAttributesRepository.findById(contentAttributeId).orElseThrow();
-		if (contentAttributes.getQuantity() >= quantity || quantity <= 0) {
+		if (contentAttributes.getQuantity() < quantity || quantity <= 0) {
 			return ResponseHandler.generateErrorResponse(new MessageError("Invalid product quantity"));
 		}
 		var attributeOfProduct = attributesRepository.findByProductAndContentAttributes(products, contentAttributes);
@@ -62,7 +62,7 @@ public class BasketServices implements BasketBillServices {
 		}
 		BasketProduct basketProduct = new BasketProduct(quantity, products, getUser(), contentAttributeId);
 		basketProductRepository.save(basketProduct);
-		return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.BAD_REQUEST, seeAllProductFromBasket());
+		return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, seeAllProductFromBasket());
 	}
 
 	@Override

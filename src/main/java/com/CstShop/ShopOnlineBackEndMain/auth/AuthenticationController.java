@@ -4,6 +4,8 @@ import com.CstShop.ShopOnlineBackEndMain.payload.response.ResponseHandler;
 import com.CstShop.ShopOnlineBackEndMain.payload.request.LogInRequest;
 import com.CstShop.ShopOnlineBackEndMain.payload.request.SignUpRequest;
 import com.CstShop.ShopOnlineBackEndMain.security.services.LogOutService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +36,10 @@ public class AuthenticationController {
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);
 		}
+	}
+
+	@GetMapping("/log-out")
+	public void logOut(HttpServletRequest request, HttpServletResponse response) {
+		logOutService.logout(request, response, null);
 	}
 }

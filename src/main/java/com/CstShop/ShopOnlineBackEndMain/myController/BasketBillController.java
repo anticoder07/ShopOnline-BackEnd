@@ -24,9 +24,14 @@ public class BasketBillController {
 	private final BillServices billServices;
 
 	@PostMapping("/basket/add")
-	public ResponseEntity<Object> addProductToBasket(@RequestParam("i") Long id, @RequestParam("q") Long quantity, @RequestParam("t") Long type) {
+	public ResponseEntity<Object> addProductToBasket(@RequestParam String i
+//					, @RequestParam Long q, @RequestParam Long t
+	) {
+//		System.out.println(i + " " + q + " " + t);
+		System.out.println(i);
 		try {
-			return basketServices.addProductToBasket(id, quantity, type);
+			return null;
+//			return basketServices.addProductToBasket(i, q, t);
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);
 		}
