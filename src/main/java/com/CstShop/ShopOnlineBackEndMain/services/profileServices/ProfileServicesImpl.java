@@ -6,13 +6,15 @@ import com.CstShop.ShopOnlineBackEndMain.repository.userRepository.UsersRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class ProfileServicesImpl implements ProfileServices {
-
 	private final UsersRepo usersRepository;
+
+	private final PasswordEncoder passwordEncoder;
 
 	private Users getUser() {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -39,7 +41,16 @@ public class ProfileServicesImpl implements ProfileServices {
 	@Override
 	public ProfileDto changePassword(String password) {
 		Long idCirculate = getUser().getId();
-		usersRepository.changeName(idCirculate, password);
+		usersRepository.changePassword(idCirculate, passwordEncoder.encode(password));
+		Users user = usersRepository.findById(idCirculate).orElseThrow();
+		ProfileDto profile = new ProfileDto(user);
+		return profile;
+	}
+
+	@Override
+	public ProfileDto changeAvatar(String avatar) {
+		Long idCirculate = getUser().getId();
+		usersRepository.changeName(idCirculate, avatar);
 		Users user = usersRepository.findById(idCirculate).orElseThrow();
 		ProfileDto profile = new ProfileDto(user);
 		return profile;

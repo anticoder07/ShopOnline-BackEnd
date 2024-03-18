@@ -47,4 +47,10 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 							update Products p set p.state = :state where p.id = :id
 					""")
 	void updateState(@Param("id") Long id, @Param("state") Boolean state);
+
+	@Modifying
+	@Query("""
+							update Products p set p.quantity = :quantity where p.id = :id
+					""")
+	void updateQuantity(@Param("id") Long id, @Param("quantity") Long quantity);
 }

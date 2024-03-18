@@ -6,11 +6,14 @@ import com.CstShop.ShopOnlineBackEndMain.entity.users.Users;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.AuthenticationResponse;
 import com.CstShop.ShopOnlineBackEndMain.payload.request.LogInRequest;
 import com.CstShop.ShopOnlineBackEndMain.payload.request.SignUpRequest;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.MessageError;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.ResponseHandler;
 import com.CstShop.ShopOnlineBackEndMain.repository.userRepository.TokenRepo;
 import com.CstShop.ShopOnlineBackEndMain.repository.userRepository.UsersRepo;
 import com.CstShop.ShopOnlineBackEndMain.security.jwt.JwtUtils;
 import com.CstShop.ShopOnlineBackEndMain.security.services.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,9 +49,9 @@ public class AuthenticationService {
 		);
 	}
 
-	public AuthenticationResponse signUp(SignUpRequest signUpRequest) {
+	public Object signUp(SignUpRequest signUpRequest) {
 		if (userRepository.existsByUserEmail(signUpRequest.getEmail())){
-			return null;
+			return ResponseHandler.generateErrorResponse(new MessageError("This Gmail already exists"));
 		}
 		Users users = new Users(
 						signUpRequest.getUsername(),
@@ -64,10 +67,10 @@ public class AuthenticationService {
 		var jwtToken = jwtUtils.generateToken(userDetails);
 		var refreshToken = jwtUtils.generateRefreshToken(userDetails);
 		saveUserToken(userDetails, jwtToken);
-		return new AuthenticationResponse(
+		return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, new AuthenticationResponse(
 						jwtToken,
 						refreshToken
-		);
+		));
 	}
 
 	private void saveUserToken(UserDetailsImpl userDetails, String jwtToken) {

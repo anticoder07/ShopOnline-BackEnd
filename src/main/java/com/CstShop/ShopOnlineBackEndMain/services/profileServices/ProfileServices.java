@@ -11,4 +11,6 @@ public interface ProfileServices {
 
 	ProfileDto changePassword(String password);
 
+	ProfileDto changeAvatar(String avatar);
+
 }

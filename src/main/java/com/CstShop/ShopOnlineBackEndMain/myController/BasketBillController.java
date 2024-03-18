@@ -1,7 +1,9 @@
 package com.CstShop.ShopOnlineBackEndMain.myController;
 
 import com.CstShop.ShopOnlineBackEndMain.payload.response.ResponseHandler;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketAddDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketProductDto;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketToBillDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillDto;
 import com.CstShop.ShopOnlineBackEndMain.services.basketBillServices.BasketServices;
 import com.CstShop.ShopOnlineBackEndMain.services.basketBillServices.BillServices;
@@ -24,14 +26,22 @@ public class BasketBillController {
 	private final BillServices billServices;
 
 	@PostMapping("/basket/add")
-	public ResponseEntity<Object> addProductToBasket(@RequestParam String i
-//					, @RequestParam Long q, @RequestParam Long t
-	) {
-//		System.out.println(i + " " + q + " " + t);
-		System.out.println(i);
+	public ResponseEntity<Object> addProductToBasket(
+					@RequestBody BasketAddDto bad
+					) {
 		try {
-			return null;
-//			return basketServices.addProductToBasket(i, q, t);
+			return basketServices.addProductToBasket(bad.getId(), bad.getQuantity(), bad.getType());
+		} catch (Exception e) {
+			return ResponseHandler.generateErrorResponse(e);
+		}
+	}
+
+	@PostMapping("/basket/transport")
+	public ResponseEntity<Object> transportProductFromBasketToBill(
+					@RequestBody BasketToBillDto basketToBillDto
+					) {
+		try {
+			return basketServices.transportProductFromBasketToBill(basketToBillDto.getIds(), basketToBillDto.getName(), basketToBillDto.getPhoneNumber(), basketToBillDto.getAddress());
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);
 		}

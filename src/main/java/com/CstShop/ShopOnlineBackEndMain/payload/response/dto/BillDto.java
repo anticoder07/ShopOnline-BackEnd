@@ -8,6 +8,8 @@ import java.util.List;
 
 @Data
 public class BillDto {
+	private Long id;
+
 	private List<ProductBillItemDto> productsList;
 
 	private Date purchasedDate;
@@ -16,7 +18,14 @@ public class BillDto {
 
 	private String stateBill;
 
-	public BillDto(List<ProductBillItemDto> productsList, Date purchasedDate, String stateBill) {
+	private String name;
+
+	private String phoneNumber;
+
+	private String address;
+
+	public BillDto(Long id, List<ProductBillItemDto> productsList, Date purchasedDate, String stateBill, String name, String phoneNumber, String address) {
+		this.id = id;
 		this.productsList = productsList;
 		this.purchasedDate = purchasedDate;
 		Double tempPrice = 0.0;
@@ -25,5 +34,8 @@ public class BillDto {
 		}
 		this.total = tempPrice;
 		this.stateBill = stateBill;
+		this.name = name;
+		this.phoneNumber = phoneNumber;
+		this.address = address;
 	}
 }

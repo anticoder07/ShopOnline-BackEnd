@@ -46,4 +46,14 @@ public class ProfileController {
 			return ResponseHandler.generateErrorResponse(e);
 		}
 	}
+
+	@PostMapping("/change/avatar")
+	public ResponseEntity<Object> changeAvatarProfile(@RequestBody String avatar) {
+		try {
+			ProfileDto profileDto = profileServices.changeAvatar(avatar);
+			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, profileDto);
+		} catch (Exception e) {
+			return ResponseHandler.generateErrorResponse(e);
+		}
+	}
 }

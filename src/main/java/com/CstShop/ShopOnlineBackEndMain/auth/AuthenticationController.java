@@ -30,9 +30,9 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/sign-up")
-	public ResponseEntity<Object> signUp(@RequestBody SignUpRequest signUpRequest){
+	public Object signUp(@RequestBody SignUpRequest signUpRequest){
 		try {
-			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, authenticationService.signUp(signUpRequest));
+			return authenticationService.signUp(signUpRequest);
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);
 		}

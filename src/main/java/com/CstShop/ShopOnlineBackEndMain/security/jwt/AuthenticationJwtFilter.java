@@ -6,7 +6,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +32,7 @@ public class AuthenticationJwtFilter extends OncePerRequestFilter {
 					@NonNull HttpServletResponse response,
 					@NonNull FilterChain filterChain
 	) throws ServletException, IOException {
-//		try {
+		try {
 			if (request.getServletPath().contains("/api/auth/")) {
 				filterChain.doFilter(request, response);
 				return;
@@ -41,14 +40,12 @@ public class AuthenticationJwtFilter extends OncePerRequestFilter {
 			final String authHeader = request.getHeader("Authorization");
 			final String jwt;
 			final String userEmail;
-			if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+			if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 				filterChain.doFilter(request, response);
 				return;
 			}
 			jwt = authHeader.substring(7);
 			userEmail = jwtUtils.extractUserEmail(jwt);
-		System.out.println(jwt);
-		System.out.println(userEmail);
 			if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 				UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 				var isTokenValid = tokenRepo.findByToken(jwt)
@@ -65,10 +62,8 @@ public class AuthenticationJwtFilter extends OncePerRequestFilter {
 				}
 			}
 			filterChain.doFilter(request, response);
-
+		} catch (Exception e) {
+			logger.error("Cannot set user authentication: " + e);
 		}
-//		catch (Exception e) {
-//			logger.error("Cannot set user authentication: " + e);
-//		}
-//	}
+	}
 }

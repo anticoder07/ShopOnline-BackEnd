@@ -4,10 +4,12 @@ import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.bills.Bills;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "bill_products")
 @Getter
+@NoArgsConstructor
 public class BillProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +28,12 @@ public class BillProduct {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "bill_id", nullable = false)
 	private Bills bill;
+
+	public BillProduct(Long quantity, Double priceOld, Long contentAttributeId, Products product, Bills bill) {
+		this.quantity = quantity;
+		this.priceOld = priceOld;
+		this.contentAttributeId = contentAttributeId;
+		this.product = product;
+		this.bill = bill;
+	}
 }

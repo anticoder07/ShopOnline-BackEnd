@@ -5,6 +5,7 @@ import com.CstShop.ShopOnlineBackEndMain.entity.users.bills.Bills;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class Users {
 
 	private String phoneNumber;
 
-	private Date dateOfBirth;
+	private LocalDate dateOfBirth;
 
 	private String avatar;
 
@@ -52,7 +53,7 @@ public class Users {
 					String userEmail,
 					String password,
 					String phoneNumber,
-					Date dateOfBirth,
+					LocalDate dateOfBirth,
 					String role,
 					String avatar
 	) {

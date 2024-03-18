@@ -62,6 +62,11 @@ public class BillServices implements BasketBillServices {
 	}
 
 	@Override
+	public ResponseEntity<Object> transportProductFromBasketToBill(List<Long> ids, String name, String phoneNumber, String address) {
+		return null;
+	}
+
+	@Override
 	public List<BillDto> seeAllBill() {
 		List<BillDto> billDtoList = new ArrayList<>();
 		List<Bills> billsList = billsRepository.findBillsByUser(getUser());
@@ -80,9 +85,13 @@ public class BillServices implements BasketBillServices {
 								));
 							});
 							billDtoList.add(new BillDto(
+											billItem.getId(),
 											productBillItemList,
 											billItem.getPurchaseDate(),
-											billItem.getStateBill().toString()
+											billItem.getStateBill().toString(),
+											billItem.getName(),
+											billItem.getPhoneNumber(),
+											billItem.getAddress()
 							));
 						}
 		);

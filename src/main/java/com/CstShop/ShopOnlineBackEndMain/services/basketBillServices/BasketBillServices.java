@@ -13,6 +13,8 @@ public interface BasketBillServices {
 
 	List<BasketProductDto> seeAllProductFromBasket();
 
+	ResponseEntity<Object> transportProductFromBasketToBill(List<Long> ids, String name, String phoneNumber, String address);
+
 	List<BillDto> seeAllBill();
 
 	List<BillDto> setStateAdmin(Long id, String state);

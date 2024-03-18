@@ -4,6 +4,7 @@ import com.CstShop.ShopOnlineBackEndMain.entity.users.Users;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -13,7 +14,7 @@ public class ProfileDto {
 
 	private String phoneNumber;
 
-	private Date dateOfBirth;
+	private LocalDate dateOfBirth;
 
 	private String userEmail;
 

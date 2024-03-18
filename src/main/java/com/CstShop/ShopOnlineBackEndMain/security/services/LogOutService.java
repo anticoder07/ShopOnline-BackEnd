@@ -21,7 +21,7 @@ public class LogOutService implements LogoutHandler {
 					Authentication authentication
 	) {
 		final String authHeader = request.getHeader("Authorization");
-		if (authHeader.isEmpty() || !authHeader.startsWith("Bearer "))
+		if (authHeader == null || !authHeader.startsWith("Bearer "))
 			return;
 		final String jwt = authHeader.substring(7);
 		var storedToken = tokenRepository.findByToken(jwt).orElse(null);

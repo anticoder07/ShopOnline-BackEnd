@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -37,7 +38,7 @@ public class SignUpRequest {
 	private String role;
 
 	@NotBlank(message = "date of birth cannot blank")
-	private Date dateOfBirth;
+	private LocalDate dateOfBirth;
 
 	private String avatar = null;
 }

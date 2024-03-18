@@ -7,6 +7,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class BasketProductDto {
+	private Long id;
+
 	private ProductDto productDto;
 
 	private Long quantity;
