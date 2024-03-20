@@ -1,7 +1,7 @@
 package com.CstShop.ShopOnlineBackEndMain.services.searchServices;
 
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
-import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketProductDto;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillAndBasketDto.BasketProductDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.ProductDto;
 import com.CstShop.ShopOnlineBackEndMain.repository.productsRepository.ProductsRepo;
 import com.CstShop.ShopOnlineBackEndMain.services.basketBillServices.BasketServices;

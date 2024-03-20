@@ -27,7 +27,7 @@ public class TakeProductServicesImpl implements ProductServices {
 	private final ContentAttributesRepo contentAttributesRepo;
 
 	@Override
-	public List<ProductDto> makeDtoByProducts(List<Products> productsList){
+	public List<ProductDto> makeDtoByProducts(List<Products> productsList) {
 		List<ProductDto> productDtoList = new ArrayList<>();
 		productsList.forEach(
 						(products) -> {
@@ -35,25 +35,29 @@ public class TakeProductServicesImpl implements ProductServices {
 							List<AttributeDto> attributeDtoList = new ArrayList<>();
 							final double[] priceMin = {Double.MAX_VALUE};
 
-							attributesList.forEach(
-											(attributes) -> {
-												List<ContentAttributes> contentAttributesList = contentAttributesRepo.findAllByAttribute(attributes);
-												List<ProductTypeItemDto> productTypeItemDtoList = new ArrayList<>();
-												contentAttributesList.forEach(contentAttributes -> {
-													productTypeItemDtoList.add(new ProductTypeItemDto(
-																	contentAttributes.getId(),
-																	contentAttributes.getPicture(),
-																	contentAttributes.getPrice(),
-																	contentAttributes.getQuantity(),
-																	contentAttributes.getSold(),
-																	contentAttributes.getContent()
-													));
-													if (priceMin[0] > contentAttributes.getPrice()) // Sử dụng priceMin[0]
-														priceMin[0] = contentAttributes.getPrice();
-												});
-												attributeDtoList.add(new AttributeDto(attributes.getId(), attributes.getNameType(), productTypeItemDtoList));
-											}
-							);
+							if (attributesList.size() != 0) {
+								attributesList.forEach(
+												(attributes) -> {
+													List<ContentAttributes> contentAttributesList = contentAttributesRepo.findAllByAttribute(attributes);
+													List<ProductTypeItemDto> productTypeItemDtoList = new ArrayList<>();
+													contentAttributesList.forEach(contentAttributes -> {
+														productTypeItemDtoList.add(new ProductTypeItemDto(
+																		contentAttributes.getId(),
+																		contentAttributes.getPicture(),
+																		contentAttributes.getPrice(),
+																		contentAttributes.getQuantity(),
+																		contentAttributes.getSold(),
+																		contentAttributes.getContent()
+														));
+														if (priceMin[0] > contentAttributes.getPrice())
+															priceMin[0] = contentAttributes.getPrice();
+													});
+													attributeDtoList.add(new AttributeDto(attributes.getId(), attributes.getNameType(), productTypeItemDtoList));
+												}
+								);
+							} else {
+								priceMin[0] = products.getPriceMin();
+							}
 
 							ProductDto productDto = new ProductDto(
 											products.getId(),

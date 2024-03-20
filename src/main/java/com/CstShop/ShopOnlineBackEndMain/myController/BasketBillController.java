@@ -1,10 +1,10 @@
 package com.CstShop.ShopOnlineBackEndMain.myController;
 
 import com.CstShop.ShopOnlineBackEndMain.payload.response.ResponseHandler;
-import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketAddDto;
-import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketProductDto;
-import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketToBillDto;
-import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillDto;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillAndBasketDto.BasketAddDto;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillAndBasketDto.BasketProductDto;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillAndBasketDto.BasketToBillDto;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillAndBasketDto.BillDto;
 import com.CstShop.ShopOnlineBackEndMain.services.basketBillServices.BasketServices;
 import com.CstShop.ShopOnlineBackEndMain.services.basketBillServices.BillServices;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class BasketBillController {
 	@PostMapping("/basket/add")
 	public ResponseEntity<Object> addProductToBasket(
 					@RequestBody BasketAddDto bad
-					) {
+	) {
 		try {
 			return basketServices.addProductToBasket(bad.getId(), bad.getQuantity(), bad.getType());
 		} catch (Exception e) {
@@ -39,7 +39,7 @@ public class BasketBillController {
 	@PostMapping("/basket/transport")
 	public ResponseEntity<Object> transportProductFromBasketToBill(
 					@RequestBody BasketToBillDto basketToBillDto
-					) {
+	) {
 		try {
 			return basketServices.transportProductFromBasketToBill(basketToBillDto.getIds(), basketToBillDto.getName(), basketToBillDto.getPhoneNumber(), basketToBillDto.getAddress());
 		} catch (Exception e) {
@@ -78,7 +78,7 @@ public class BasketBillController {
 
 	@PostMapping("bill/set-state/admin")
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	public ResponseEntity<Object> setStateAdmin(@RequestBody Long id, @RequestBody String state){
+	public ResponseEntity<Object> setStateAdmin(@RequestBody Long id, @RequestBody String state) {
 		try {
 			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, billServices.setStateAdmin(id, state));
 		} catch (Exception e) {
@@ -88,7 +88,7 @@ public class BasketBillController {
 
 	@PostMapping("bill/set-state")
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-	public ResponseEntity<Object> setStateUser(@RequestBody Long id, @RequestBody String state){
+	public ResponseEntity<Object> setStateUser(@RequestBody Long id, @RequestBody String state) {
 		try {
 			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, billServices.setStateUser(id, state));
 		} catch (Exception e) {

@@ -1,7 +1,7 @@
 package com.CstShop.ShopOnlineBackEndMain.services.basketBillServices;
 
-import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketProductDto;
-import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillDto;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillAndBasketDto.BasketProductDto;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillAndBasketDto.BillDto;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

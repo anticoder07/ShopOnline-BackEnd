@@ -9,8 +9,8 @@ import com.CstShop.ShopOnlineBackEndMain.entity.users.bills.Bills;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.bills.EBillType;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.MessageError;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.ResponseHandler;
-import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BasketProductDto;
-import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillDto;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillAndBasketDto.BasketProductDto;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillAndBasketDto.BillDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.ProductDto;
 import com.CstShop.ShopOnlineBackEndMain.repository.basketProductRepository.BasketProductRepo;
 import com.CstShop.ShopOnlineBackEndMain.repository.billProductRepository.BillProductRepo;
@@ -71,12 +71,17 @@ public class BasketServices implements BasketBillServices {
 			return ResponseHandler.generateErrorResponse(new MessageError("This product does not exist"));
 		}
 		BasketProduct basketProductCurrent = basketProductRepository.findAllByUserAndProduct(getUser(), products);
-		if (basketProductCurrent != null){
-			if (basketProductCurrent.getQuantity() + quantity > contentAttributes.getQuantity()){
+		if (basketProductCurrent != null) {
+			if (basketProductCurrent.getQuantity() + quantity > contentAttributes.getQuantity()) {
 				return ResponseHandler.generateErrorResponse(new MessageError("Invalid product quantity"));
 			} else {
-				basketProductCurrent.setQuantity(basketProductCurrent.getQuantity() + quantity);
-				basketProductRepository.save(basketProductCurrent);
+				if (basketProductCurrent.getContentAttributeId().equals(contentAttributeId)) {
+					basketProductCurrent.setQuantity(basketProductCurrent.getQuantity() + quantity);
+					basketProductRepository.save(basketProductCurrent);
+				} else {
+					BasketProduct basketProduct = new BasketProduct(quantity, products, getUser(), contentAttributeId);
+					basketProductRepository.save(basketProduct);
+				}
 			}
 		} else {
 			BasketProduct basketProduct = new BasketProduct(quantity, products, getUser(), contentAttributeId);
@@ -87,10 +92,7 @@ public class BasketServices implements BasketBillServices {
 
 	@Override
 	public ResponseEntity<Object> deleteProductIntoBasket(Long id) {
-		Products products = productsRepository.findAllById(id);
-		if (products == null)
-			return ResponseHandler.generateErrorResponse(new MessageError("Insufficient quantity of products"));
-		BasketProduct basketProduct = basketProductRepository.findAllByUserAndProduct(getUser(), products);
+		BasketProduct basketProduct = basketProductRepository.findAllByUserAndId(getUser(), id);
 		if (basketProduct == null)
 			return ResponseHandler.generateErrorResponse(new MessageError("This product does not exist"));
 		basketProductRepository.delete(basketProduct);

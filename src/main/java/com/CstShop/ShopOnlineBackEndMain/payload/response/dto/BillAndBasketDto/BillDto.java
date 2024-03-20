@@ -1,4 +1,4 @@
-package com.CstShop.ShopOnlineBackEndMain.payload.response.dto;
+package com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillAndBasketDto;
 
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.ProductBillItemDto;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class BillDto {
 
 	private Date purchasedDate;
 
-	private Double total = 0.0;
+	private Double total;
 
 	private String stateBill;
 
@@ -30,7 +30,7 @@ public class BillDto {
 		this.purchasedDate = purchasedDate;
 		Double tempPrice = 0.0;
 		for (ProductBillItemDto product : productsList){
-			tempPrice += product.getOldPrice();
+			tempPrice += product.getOldPrice() * product.getQuantity();
 		}
 		this.total = tempPrice;
 		this.stateBill = stateBill;

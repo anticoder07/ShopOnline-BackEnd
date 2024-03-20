@@ -32,6 +32,8 @@ public class Products {
 
 	private Boolean state;
 
+	private Double priceMin;
+
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY,
 					cascade = CascadeType.ALL)
 	private List<Attributes> attributes;

@@ -175,30 +175,34 @@ public class ChangeProductServiceImpl implements ProductServices {
 		productsRepository.save(products);
 
 		List<AttributeDto> attributeDtoList = productDto.getProductTypeList();
-		List<Attributes> attributesList = new ArrayList<>();
-		attributeDtoList.forEach(
-						attributeDto -> {
-							Attributes attributes = new Attributes(attributeDto.getType(), products);
-							attributesRepository.save(attributes);
-							List<ProductTypeItemDto> productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
-							productTypeItemDtoList.forEach(
-											item -> {
-												ContentAttributes contentAttributes = new ContentAttributes(
-																item.getPicture(),
-																item.getPrice(),
-																item.getQuantity(),
-																item.getSold(),
-																item.getContent()
-												);
-												contentAttributes.setAttribute(attributes);
-												contentAttributesRepository.save(contentAttributes);
-											}
-							);
-							attributesRepository.save(attributes);
-						}
-		);
+		if (attributeDtoList.size() < 1){
+			List<Attributes> attributesList = new ArrayList<>();
+			attributeDtoList.forEach(
+							attributeDto -> {
+								Attributes attributes = new Attributes(attributeDto.getType(), products);
+								attributesRepository.save(attributes);
+								List<ProductTypeItemDto> productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
+								productTypeItemDtoList.forEach(
+												item -> {
+													ContentAttributes contentAttributes = new ContentAttributes(
+																	item.getPicture(),
+																	item.getPrice(),
+																	item.getQuantity(),
+																	item.getSold(),
+																	item.getContent()
+													);
+													contentAttributes.setAttribute(attributes);
+													contentAttributesRepository.save(contentAttributes);
+												}
+								);
+								attributesRepository.save(attributes);
+							}
+			);
 
-		products.setAttributes(attributesList);
+			products.setAttributes(attributesList);
+		} else {
+				products.setPriceMin(productDto.getPriceMin());
+		}
 		productsRepository.save(products);
 
 		return takeProductServices.makeDtoByProducts(Arrays.asList(products)).get(0);

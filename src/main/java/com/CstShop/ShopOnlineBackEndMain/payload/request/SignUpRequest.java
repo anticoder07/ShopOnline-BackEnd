@@ -38,7 +38,7 @@ public class SignUpRequest {
 	private String role;
 
 	@NotBlank(message = "date of birth cannot blank")
-	private LocalDate dateOfBirth;
+	private LocalDate	 dateOfBirth;
 
 	private String avatar = null;
 }

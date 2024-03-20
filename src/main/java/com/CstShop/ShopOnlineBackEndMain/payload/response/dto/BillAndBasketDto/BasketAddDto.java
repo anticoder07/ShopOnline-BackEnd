@@ -1,4 +1,4 @@
-package com.CstShop.ShopOnlineBackEndMain.payload.response.dto;
+package com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillAndBasketDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

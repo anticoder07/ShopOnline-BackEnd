@@ -2,6 +2,7 @@ package com.CstShop.ShopOnlineBackEndMain.myController;
 
 import com.CstShop.ShopOnlineBackEndMain.payload.response.ResponseHandler;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.ProfileDto;
+import com.CstShop.ShopOnlineBackEndMain.services.HeaderService;
 import com.CstShop.ShopOnlineBackEndMain.services.profileServices.ProfileServicesImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,17 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProfileController {
 	private final ProfileServicesImpl profileServices;
+
+	private final HeaderService headerService;
+
+	@GetMapping("/header")
+	public ResponseEntity<Object> getInformationHeader(){
+		try {
+			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, headerService.takeInformationHeader());
+		} catch (Exception e) {
+			return ResponseHandler.generateErrorResponse(e);
+		}
+	}
 
 	@GetMapping("/see")
 	public ResponseEntity<Object> seeProfile() {

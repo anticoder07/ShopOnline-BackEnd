@@ -16,6 +16,7 @@ public class Descriptions {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(columnDefinition="TEXT")
 	private String content;
 
 	@OneToOne(mappedBy = "description")

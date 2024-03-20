@@ -1,12 +1,12 @@
-package com.CstShop.ShopOnlineBackEndMain.payload.response.dto;
+package com.CstShop.ShopOnlineBackEndMain.payload.response.dto.BillAndBasketDto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class BasketToBillDto {
