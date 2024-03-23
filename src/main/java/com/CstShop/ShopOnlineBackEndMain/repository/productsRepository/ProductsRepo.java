@@ -22,6 +22,8 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 
 	List<Products> findAllByState(Boolean state);
 
+	List<Products> findAllByStateAndType(Boolean state, EProductTypes types);
+
 	Products findAllById(long id);
 
 	Products findAllByBillProducts(BillProduct billProduct);

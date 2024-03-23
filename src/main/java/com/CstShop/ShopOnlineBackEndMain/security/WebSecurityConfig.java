@@ -61,7 +61,8 @@ public class WebSecurityConfig {
 														"/api/auth/*",
 														"api/take/product/*",
 														"api/take/product/by/type",
-														"api/take/product/by/id"
+														"api/take/product/by/id",
+														"api/take/product/home-page/*"
 										)
 										.permitAll()
 										.anyRequest().authenticated())

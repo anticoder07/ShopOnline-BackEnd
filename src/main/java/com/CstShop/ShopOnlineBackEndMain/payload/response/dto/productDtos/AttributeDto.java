@@ -12,5 +12,5 @@ public class AttributeDto {
 
 	private String type;
 
-	List<ProductTypeItemDto> productTypeItemDtoList;
+	private List<ProductTypeItemDto> productTypeItemDtoList;
 }

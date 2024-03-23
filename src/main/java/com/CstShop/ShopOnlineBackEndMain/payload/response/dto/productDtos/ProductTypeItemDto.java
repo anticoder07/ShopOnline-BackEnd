@@ -8,7 +8,7 @@ import lombok.Data;
 public class ProductTypeItemDto {
 	private Long id;
 
-	private byte[] picture;
+	private String picture;
 
 	private Double price;
 

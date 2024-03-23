@@ -3,6 +3,7 @@ package com.CstShop.ShopOnlineBackEndMain.services.basketBillServices;
 import com.CstShop.ShopOnlineBackEndMain.entity.billProduct.BillProduct;
 import com.CstShop.ShopOnlineBackEndMain.entity.products.ContentAttributes;
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
+import com.CstShop.ShopOnlineBackEndMain.entity.users.ERole;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.Users;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.bills.Bills;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.bills.EBillType;
@@ -21,9 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -69,7 +68,12 @@ public class BillServices implements BasketBillServices {
 	@Override
 	public List<BillDto> seeAllBill() {
 		List<BillDto> billDtoList = new ArrayList<>();
-		List<Bills> billsList = billsRepository.findBillsByUser(getUser());
+		List<Bills> billsList = new ArrayList<>();
+		if (getUser().getRole().equals(ERole.ADMIN)) {
+			billsList = billsRepository.findAll();
+		} else {
+			billsList = billsRepository.findBillsByUser(getUser());
+		}
 		billsList.forEach((billItem) -> {
 
 							List<BillProduct> billProductList = billProductRepository.findAllByBill(billItem);
@@ -101,26 +105,27 @@ public class BillServices implements BasketBillServices {
 	@Override
 	public List<BillDto> setStateAdmin(Long id, String state) {
 		Bills bills = billsRepository.findByIdAndUser(id, getUser()).orElseThrow();
-		if (state.equals("delivering")) { // đang giao hàng
-			bills.setStateBill(EBillType.DELIVERING);
-		} else if (state.equals("preparing for delivery")) { // chuẩn bị giao hàng
-			bills.setStateBill(EBillType.PREPARING_FOR_DELIVERY);
-		} else if (state.equals("pending approval")) { // đang xét duyệt
-			bills.setStateBill(EBillType.PENDING_APPROVAL);
-		} else if (state.equals("delivered")) { // đã gao
-			bills.setStateBill(EBillType.DELIVERED);
-		} else { // đã nhận
-			bills.setStateBill(EBillType.RECEIVED);
-		}
+
+		Map<String, EBillType> stateMap = new HashMap<>();
+		stateMap.put("DELIVERING", EBillType.DELIVERING);
+		stateMap.put("PREPARING_FOR_DELIVERY", EBillType.PREPARING_FOR_DELIVERY);
+		stateMap.put("PENDING_APPROVAL", EBillType.PENDING_APPROVAL);
+		stateMap.put("DELIVERED", EBillType.DELIVERED);
+		stateMap.put("RECEIVED", EBillType.RECEIVED);
+
+		EBillType billType = stateMap.getOrDefault(state, EBillType.RECEIVED);
+		bills.setStateBill(billType);
+
 		return seeAllBill();
 	}
+
 
 	@Override
 	public List<BillDto> setStateUser(Long id, String state) {
 		Bills bills = billsRepository.findByIdAndUser(id, getUser()).orElseThrow();
-		if (state.equals("received")) { // đã nhận
+		if (state.equals("received")) {
 			bills.setStateBill(EBillType.RECEIVED);
-		} else { // Hủy mua sản phẩm khi đang xét duyệt
+		} else {
 			if (bills.getStateBill().equals(EBillType.PENDING_APPROVAL)) {
 				List<BillProduct> billProductList = bills.getBillProducts();
 				billProductList.forEach(

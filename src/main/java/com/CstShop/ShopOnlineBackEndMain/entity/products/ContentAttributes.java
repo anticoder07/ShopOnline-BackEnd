@@ -15,7 +15,7 @@ public class ContentAttributes {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private byte[] picture;
+	private String picture;
 
 	private Double price;
 
@@ -29,7 +29,7 @@ public class ContentAttributes {
 	@JoinColumn(name = "attribute_id", nullable = false)
 	private Attributes attribute;
 
-	public ContentAttributes(byte[] picture, Double price, Long quantity, Long sold, String content) {
+	public ContentAttributes(String picture, Double price, Long quantity, Long sold, String content) {
 		this.picture = picture;
 		this.price = price;
 		this.quantity = quantity;

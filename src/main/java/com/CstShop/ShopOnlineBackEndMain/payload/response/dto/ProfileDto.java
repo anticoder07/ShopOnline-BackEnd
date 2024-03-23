@@ -3,6 +3,7 @@ package com.CstShop.ShopOnlineBackEndMain.payload.response.dto;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.Users;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.Date;

@@ -26,7 +26,7 @@ public interface ContentAttributesRepo extends JpaRepository<ContentAttributes, 
 					""")
 	void updateContentAttributes(
 					@Param("id") Long id,
-					@Param("picture") byte[] picture,
+					@Param("picture") String picture,
 					@Param("price") Double price,
 					@Param("quantity") Long quantity,
 					@Param("sold") Long sold,

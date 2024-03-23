@@ -30,6 +30,7 @@ public class BasketBillController {
 					@RequestBody BasketAddDto bad
 	) {
 		try {
+
 			return basketServices.addProductToBasket(bad.getId(), bad.getQuantity(), bad.getType());
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);
@@ -76,9 +77,9 @@ public class BasketBillController {
 		}
 	}
 
-	@PostMapping("bill/set-state/admin")
+	@GetMapping("bill/set-state/admin/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	public ResponseEntity<Object> setStateAdmin(@RequestBody Long id, @RequestBody String state) {
+	public ResponseEntity<Object> setStateAdmin(@RequestParam String state, @PathVariable Long id) {
 		try {
 			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, billServices.setStateAdmin(id, state));
 		} catch (Exception e) {

@@ -3,6 +3,7 @@ package com.CstShop.ShopOnlineBackEndMain.services.productServices;
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.ProductDto;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface ProductServices {
 	List<ProductDto> makeDtoByProducts(List<Products> productsList);
 
-	List<ProductDto> takeProductsToHomePage();
+	List<ProductDto> takeProductsToHomePage(String type);
 
 	List<ProductDto> takeProductsByType(String type);
 

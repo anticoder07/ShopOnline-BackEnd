@@ -1,6 +1,7 @@
 package com.CstShop.ShopOnlineBackEndMain.myController.productController;
 
 import com.CstShop.ShopOnlineBackEndMain.payload.response.ResponseHandler;
+import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.AttributeDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.ProductDto;
 import com.CstShop.ShopOnlineBackEndMain.services.productServices.ChangeProductServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/product")

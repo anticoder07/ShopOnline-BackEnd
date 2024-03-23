@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class TakeProductsController {
 	private final TakeProductServicesImpl takeProductServices;
 
-	@GetMapping("/home-page")
-	public ResponseEntity<Object> takeProductHomePage() {
+	@GetMapping("/home-page/{type}")
+	public ResponseEntity<Object> takeProductHomePage(@PathVariable String type) {
 		try {
-			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, takeProductServices.takeProductsToHomePage());
+			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, takeProductServices.takeProductsToHomePage(type));
 		} catch (Exception e) {
 			return ResponseHandler.generateErrorResponse(e);
 		}

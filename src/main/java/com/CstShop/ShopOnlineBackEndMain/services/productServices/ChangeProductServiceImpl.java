@@ -8,13 +8,13 @@ import com.CstShop.ShopOnlineBackEndMain.repository.productsRepository.Attribute
 import com.CstShop.ShopOnlineBackEndMain.repository.productsRepository.ContentAttributesRepo;
 import com.CstShop.ShopOnlineBackEndMain.repository.productsRepository.DescriptionsRepo;
 import com.CstShop.ShopOnlineBackEndMain.repository.productsRepository.ProductsRepo;
+import com.CstShop.ShopOnlineBackEndMain.services.CloudServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -31,13 +31,15 @@ public class ChangeProductServiceImpl implements ProductServices {
 
 	private final TakeProductServicesImpl takeProductServices;
 
+	private final CloudServices cloudServices;
+
 	@Override
 	public List<ProductDto> makeDtoByProducts(List<Products> productsList) {
 		return null;
 	}
 
 	@Override
-	public List<ProductDto> takeProductsToHomePage() {
+	public List<ProductDto> takeProductsToHomePage(String type) {
 		return null;
 	}
 
@@ -58,18 +60,13 @@ public class ChangeProductServiceImpl implements ProductServices {
 
 	@Override
 	public ProductDto changeProduct(ProductDto productDto) {
-		EProductTypes type;
-		if (productDto.getType().equals("Điện thoại phụ kiện")) {
-			type = EProductTypes.DIENTHOAIPHUKIEN;
-		} else if (productDto.getType().equals("Máy tính laptop")) {
-			type = EProductTypes.MAYTINHLAPTOP;
-		} else if (productDto.getType().equals("Thời trang nam nữ")) {
-			type = EProductTypes.THOITRANGNAMNU;
-		} else if (productDto.getType().equals("Mỹ phẩm chính hãng")) {
-			type = EProductTypes.MYPHAMCHINHHANG;
-		} else {
-			type = EProductTypes.SANPHAMKHAC;
-		}
+		EProductTypes type = switch (productDto.getType()) {
+			case "Điện thoại phụ kiện" -> EProductTypes.DIENTHOAIPHUKIEN;
+			case "Máy tính laptop" -> EProductTypes.MAYTINHLAPTOP;
+			case "Thời trang nam nữ" -> EProductTypes.THOITRANGNAMNU;
+			case "Mỹ phẩm chính hãng" -> EProductTypes.MYPHAMCHINHHANG;
+			default -> EProductTypes.SANPHAMKHAC;
+		};
 		productsRepository.alterProduct(productDto.getId(), productDto.getName(), productDto.getPicture(), productDto.getSold(), productDto.getQuantity(), type, productDto.getState());
 
 		Products products = productsRepository.findAllById(productDto.getId());
@@ -146,13 +143,13 @@ public class ChangeProductServiceImpl implements ProductServices {
 			attributesRepository.save(attributes);
 
 			List<ProductTypeItemDto> productTypeItemDtoList = attributeDtoList.get(i).getProductTypeItemDtoList();
-			for (int j = 0; j < productTypeItemDtoList.size(); j++) {
+			for (ProductTypeItemDto productTypeItemDto : productTypeItemDtoList) {
 				ContentAttributes contentAttributes = new ContentAttributes(
-								productTypeItemDtoList.get(j).getPicture(),
-								productTypeItemDtoList.get(j).getPrice(),
-								productTypeItemDtoList.get(j).getQuantity(),
-								productTypeItemDtoList.get(j).getSold(),
-								productTypeItemDtoList.get(j).getContent()
+								productTypeItemDto.getPicture(),
+								productTypeItemDto.getPrice(),
+								productTypeItemDto.getQuantity(),
+								productTypeItemDto.getSold(),
+								productTypeItemDto.getContent()
 				);
 				contentAttributes.setAttribute(attributes);
 				contentAttributesRepository.save(contentAttributes);
@@ -163,8 +160,145 @@ public class ChangeProductServiceImpl implements ProductServices {
 		return takeProductServices.makeDtoByProducts(List.of(products)).get(0);
 	}
 
+//	@Override
+//	public ProductDto addProduct(ProductDto productDto) {
+//		System.out.println(productDto);
+//
+//		String urlPicture = "";
+//		if (productDto.getPicture() != null) {
+//			urlPicture = cloudServices.uploadPictureByBase64(productDto.getPicture());
+//		}
+//
+//		productDto.setPicture(urlPicture);
+//
+//		Products products = new Products(productDto);
+//		productsRepository.save(products);
+//
+//		Descriptions descriptions = new Descriptions(productDto.getDescription(), products);
+//		descriptionsRepository.save(descriptions);
+//
+//		products.setDescription(descriptions);
+//		productsRepository.save(products);
+//
+//		final Double[] priceMin = {products.getPriceMin()};
+//
+//		List<AttributeDto> attributeDtoList = productDto.getProductTypeList();
+//		if (attributeDtoList.size() > 0) {
+//			List<Attributes> attributesList = new ArrayList<>();
+//			attributeDtoList.forEach(
+//							attributeDto -> {
+//								Attributes attributes = new Attributes(attributeDto.getType(), products);
+//								attributesRepository.save(attributes);
+//								List<ProductTypeItemDto> productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
+//								productTypeItemDtoList.forEach(
+//												item -> {
+//													String urlPictureType = null;
+//													if (item.getPicture() != null)
+//														urlPictureType = cloudServices.uploadPictureByBase64(item.getPicture());
+//													ContentAttributes contentAttributes = new ContentAttributes(
+//																	urlPictureType,
+//																	item.getPrice(),
+//																	item.getQuantity(),
+//																	item.getSold(),
+//																	item.getContent()
+//													);
+//													if (priceMin[0] > item.getPrice())
+//														priceMin[0] = item.getPrice();
+//													contentAttributes.setAttribute(attributes);
+//													contentAttributesRepository.save(contentAttributes);
+//												}
+//								);
+//								attributesRepository.save(attributes);
+//							}
+//			);
+//
+//			products.setAttributes(attributesList);
+//		}
+////		else {
+//			products.setPriceMin(priceMin[0]);
+////		}
+//		productsRepository.save(products);
+//
+//		return takeProductServices.makeDtoByProducts(List.of(products)).get(0);
+//	}
+
+//	@Override
+//	public ProductDto addProduct(ProductDto productDto) {
+//		System.out.println(productDto);
+//
+//		String urlPicture = "";
+//		if (productDto.getPicture() != null) {
+//			urlPicture = cloudServices.uploadPictureByBase64(productDto.getPicture());
+//		}
+//
+//		productDto.setPicture(urlPicture);
+//
+//		Products products = new Products(productDto);
+//		productsRepository.save(products);
+//
+//		Descriptions descriptions = new Descriptions(productDto.getDescription(), products);
+//		descriptionsRepository.save(descriptions);
+//
+//		products.setDescription(descriptions);
+//		productsRepository.save(products);
+//
+//		Double[] priceMin = new Double[1];
+//		priceMin[0] = productDto.getPriceMin();
+//		System.out.println("=== " + priceMin[0] );
+//
+//		List<AttributeDto> attributeDtoList = productDto.getProductTypeList();
+//		if (attributeDtoList.size() > 0) {
+//			List<Attributes> attributesList = new ArrayList<>();
+//			attributeDtoList.forEach(attributeDto -> {
+//				Attributes attributes = new Attributes(attributeDto.getType(), products);
+//				attributesRepository.save(attributes);
+//				attributesList.add(attributes);
+//
+//				List<ProductTypeItemDto> productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
+//				productTypeItemDtoList.forEach(item -> {
+//					String urlPictureType = null;
+//					if (item.getPicture() != null) {
+//						urlPictureType = cloudServices.uploadPictureByBase64(item.getPicture());
+//					}
+//					ContentAttributes contentAttributes = new ContentAttributes(
+//									urlPictureType,
+//									item.getPrice(),
+//									item.getQuantity(),
+//									item.getSold(),
+//									item.getContent()
+//					);
+//					if (priceMin[0] > item.getPrice()) {
+//						priceMin[0] = item.getPrice();
+//					}
+//					contentAttributes.setAttribute(attributes);
+//					contentAttributesRepository.save(contentAttributes);
+//				});
+//			});
+//
+//			products.setAttributes(attributesList);
+//		}
+//
+//		System.out.println("helo--------------------");
+//		System.out.println("====" + priceMin[0]);
+//		System.out.println("bye--------------------");
+//
+//		products.setPriceMin(priceMin[0]); // Set the minimum price
+//		productsRepository.save(products);
+//
+//		return takeProductServices.makeDtoByProducts(List.of(products)).get(0);
+//	}
+
 	@Override
 	public ProductDto addProduct(ProductDto productDto) {
+		System.out.println(productDto);
+
+		String urlPicture = "";
+		if (productDto.getPicture() != null) {
+			urlPicture = cloudServices.uploadPictureByBase64(productDto.getPicture());
+		}
+
+		productDto.setPicture(urlPicture);
+
 		Products products = new Products(productDto);
 		productsRepository.save(products);
 
@@ -174,39 +308,52 @@ public class ChangeProductServiceImpl implements ProductServices {
 		products.setDescription(descriptions);
 		productsRepository.save(products);
 
+		Double[] priceMin = new Double[1];
+		priceMin[0] = productDto.getPriceMin();
+		System.out.println("Initial priceMin value: " + priceMin[0]);
+
 		List<AttributeDto> attributeDtoList = productDto.getProductTypeList();
-		if (attributeDtoList.size() < 1){
+		if (attributeDtoList.size() > 0) {
 			List<Attributes> attributesList = new ArrayList<>();
-			attributeDtoList.forEach(
-							attributeDto -> {
-								Attributes attributes = new Attributes(attributeDto.getType(), products);
-								attributesRepository.save(attributes);
-								List<ProductTypeItemDto> productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
-								productTypeItemDtoList.forEach(
-												item -> {
-													ContentAttributes contentAttributes = new ContentAttributes(
-																	item.getPicture(),
-																	item.getPrice(),
-																	item.getQuantity(),
-																	item.getSold(),
-																	item.getContent()
-													);
-													contentAttributes.setAttribute(attributes);
-													contentAttributesRepository.save(contentAttributes);
-												}
-								);
-								attributesRepository.save(attributes);
-							}
-			);
+			attributeDtoList.forEach(attributeDto -> {
+				Attributes attributes = new Attributes(attributeDto.getType(), products);
+				attributesRepository.save(attributes);
+				attributesList.add(attributes);
+
+				List<ProductTypeItemDto> productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
+				productTypeItemDtoList.forEach(item -> {
+					System.out.println("Item price: " + item.getPrice()); // Kiểm tra giá trị của item.getPrice()
+					String urlPictureType = null;
+					if (item.getPicture() != null) {
+						urlPictureType = cloudServices.uploadPictureByBase64(item.getPicture());
+					}
+					ContentAttributes contentAttributes = new ContentAttributes(
+									urlPictureType,
+									item.getPrice(),
+									item.getQuantity(),
+									item.getSold(),
+									item.getContent()
+					);
+					if (priceMin[0] > item.getPrice()) {
+						priceMin[0] = item.getPrice();
+					}
+					contentAttributes.setAttribute(attributes);
+					contentAttributesRepository.save(contentAttributes);
+				});
+
+			});
 
 			products.setAttributes(attributesList);
-		} else {
-				products.setPriceMin(productDto.getPriceMin());
 		}
+
+		System.out.println("Updated priceMin value after processing: " + priceMin[0]);
+
+		products.setPriceMin(priceMin[0]); // Set the minimum price
 		productsRepository.save(products);
 
-		return takeProductServices.makeDtoByProducts(Arrays.asList(products)).get(0);
+		return takeProductServices.makeDtoByProducts(List.of(products)).get(0);
 	}
+
 
 	@Override
 	public Boolean deleteProduct(Long id) {

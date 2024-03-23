@@ -67,9 +67,9 @@ public class BasketServices implements BasketBillServices {
 			return ResponseHandler.generateErrorResponse(new MessageError("Invalid product quantity"));
 		}
 		var attributeOfProduct = attributesRepository.findByProductAndContentAttributes(products, contentAttributes).orElse(null);
-		if (attributeOfProduct == null) {
-			return ResponseHandler.generateErrorResponse(new MessageError("This product does not exist"));
-		}
+//		if (attributeOfProduct == null) {
+//			return ResponseHandler.generateErrorResponse(new MessageError("This product does not exist"));
+//		}
 		BasketProduct basketProductCurrent = basketProductRepository.findAllByUserAndProduct(getUser(), products);
 		if (basketProductCurrent != null) {
 			if (basketProductCurrent.getQuantity() + quantity > contentAttributes.getQuantity()) {

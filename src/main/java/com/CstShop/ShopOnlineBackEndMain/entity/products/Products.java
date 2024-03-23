@@ -58,13 +58,14 @@ public class Products {
 		this.picture = productDto.getPicture();
 		this.sold = productDto.getSold();
 		this.quantity = productDto.getQuantity();
-		if (productDto.getType() == "Điện thoại phụ kiện"){
+		this.picture = productDto.getPicture();
+		if (productDto.getType().equals("Điện thoại phụ kiện")){
 			this.type = EProductTypes.DIENTHOAIPHUKIEN;
-		} else if (productDto.getType() == "Máy tính laptop") {
+		} else if (productDto.getType().equals("Máy tính laptop")) {
 			this.type = EProductTypes.MAYTINHLAPTOP;
-		} else if (productDto.getType() == "Thời trang nam nữ") {
+		} else if (productDto.getType().equals("Thời trang nam nữ")) {
 			this.type = EProductTypes.THOITRANGNAMNU;
-		} else if (productDto.getType() == "Mỹ phẩm chính hãng") {
+		} else if (productDto.getType().equals("Mỹ phẩm chính hãng")) {
 			this.type = EProductTypes.MYPHAMCHINHHANG;
 		} else {
 			this.type = EProductTypes.SANPHAMKHAC;
