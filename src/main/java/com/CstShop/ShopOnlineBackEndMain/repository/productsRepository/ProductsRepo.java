@@ -40,9 +40,14 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 					@Param("quantity") Long quantity,
 					@Param("typeProduct") EProductTypes type,
 					@Param("state") Boolean state
-					);
+	);
 
-	List<Products> searchProductsByName(String name);
+	@Query("""
+    select p from Products p 
+    where (p.name like %?1% or cast(p.type as string) 
+    like %?1%) and p.state = true
+""")
+	List<Products> searchProductsByNameAndState(String name);
 
 	@Modifying
 	@Query("""

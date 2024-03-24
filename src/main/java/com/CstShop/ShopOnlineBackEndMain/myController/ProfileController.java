@@ -2,17 +2,13 @@ package com.CstShop.ShopOnlineBackEndMain.myController;
 
 import com.CstShop.ShopOnlineBackEndMain.payload.response.ResponseHandler;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.ProfileDto;
-import com.CstShop.ShopOnlineBackEndMain.services.BASE64DecodedMultipartFile;
 import com.CstShop.ShopOnlineBackEndMain.services.HeaderService;
 import com.CstShop.ShopOnlineBackEndMain.services.profileServices.ProfileServicesImpl;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("api/profile")

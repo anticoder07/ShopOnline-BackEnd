@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public interface SearchServices {
-	List<ProductDto> searchProduct(String input);
+	List<ProductDto> searchAllProductActivity(String input);
 
 	List<BasketProductDto> searchProductFromBasket(String input);
 

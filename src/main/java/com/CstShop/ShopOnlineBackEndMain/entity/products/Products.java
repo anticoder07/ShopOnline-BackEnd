@@ -55,7 +55,6 @@ public class Products {
 
 	public Products(ProductDto productDto) {
 		this.name = productDto.getName();
-		this.picture = productDto.getPicture();
 		this.sold = productDto.getSold();
 		this.quantity = productDto.getQuantity();
 		this.picture = productDto.getPicture();

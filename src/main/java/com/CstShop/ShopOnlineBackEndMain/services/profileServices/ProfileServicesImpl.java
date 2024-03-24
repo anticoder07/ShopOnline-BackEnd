@@ -9,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
@@ -27,8 +26,7 @@ public class ProfileServicesImpl implements ProfileServices {
 
 	@Override
 	public ProfileDto takeProfile() {
-		ProfileDto profile = new ProfileDto(getUser());
-		return profile;
+		return new ProfileDto(getUser());
 	}
 
 	@Override

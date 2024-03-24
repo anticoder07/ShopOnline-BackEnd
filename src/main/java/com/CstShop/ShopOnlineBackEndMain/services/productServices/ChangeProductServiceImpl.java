@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -290,7 +291,6 @@ public class ChangeProductServiceImpl implements ProductServices {
 
 	@Override
 	public ProductDto addProduct(ProductDto productDto) {
-		System.out.println(productDto);
 
 		String urlPicture = "";
 		if (productDto.getPicture() != null) {
@@ -310,7 +310,6 @@ public class ChangeProductServiceImpl implements ProductServices {
 
 		Double[] priceMin = new Double[1];
 		priceMin[0] = productDto.getPriceMin();
-		System.out.println("Initial priceMin value: " + priceMin[0]);
 
 		List<AttributeDto> attributeDtoList = productDto.getProductTypeList();
 		if (attributeDtoList.size() > 0) {
@@ -322,22 +321,26 @@ public class ChangeProductServiceImpl implements ProductServices {
 
 				List<ProductTypeItemDto> productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
 				productTypeItemDtoList.forEach(item -> {
-					System.out.println("Item price: " + item.getPrice()); // Kiểm tra giá trị của item.getPrice()
-					String urlPictureType = null;
-					if (item.getPicture() != null) {
-						urlPictureType = cloudServices.uploadPictureByBase64(item.getPicture());
+					String urlPictureType = "";
+					if (!item.getPicture().equals("")) {
+						try {
+							urlPictureType = cloudServices.uploadPictureByBase64(item.getPicture());
+						} catch (Exception e){
+							urlPictureType = "";
+						}
 					}
+
 					ContentAttributes contentAttributes = new ContentAttributes(
 									urlPictureType,
 									item.getPrice(),
 									item.getQuantity(),
 									item.getSold(),
-									item.getContent()
+									item.getContent(),
+									attributes
 					);
 					if (priceMin[0] > item.getPrice()) {
 						priceMin[0] = item.getPrice();
 					}
-					contentAttributes.setAttribute(attributes);
 					contentAttributesRepository.save(contentAttributes);
 				});
 
@@ -346,9 +349,7 @@ public class ChangeProductServiceImpl implements ProductServices {
 			products.setAttributes(attributesList);
 		}
 
-		System.out.println("Updated priceMin value after processing: " + priceMin[0]);
-
-		products.setPriceMin(priceMin[0]); // Set the minimum price
+		products.setPriceMin(priceMin[0]);
 		productsRepository.save(products);
 
 		return takeProductServices.makeDtoByProducts(List.of(products)).get(0);

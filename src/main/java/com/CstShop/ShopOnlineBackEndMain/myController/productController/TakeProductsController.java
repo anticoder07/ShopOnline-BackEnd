@@ -33,7 +33,7 @@ public class TakeProductsController {
 	}
 
 	@GetMapping("/by/id")
-	public ResponseEntity<Object> takeProductsByType(@RequestParam("i") long id) {
+	public ResponseEntity<Object> takeProductsById(@RequestParam("i") long id) {
 		try {
 			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, takeProductServices.takeInformationProductById(id));
 		} catch (Exception e) {

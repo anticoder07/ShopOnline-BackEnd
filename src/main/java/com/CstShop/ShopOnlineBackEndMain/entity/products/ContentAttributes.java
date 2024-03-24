@@ -37,5 +37,12 @@ public class ContentAttributes {
 		this.content = content;
 	}
 
-
+	public ContentAttributes(String picture, Double price, Long quantity, Long sold, String content, Attributes attribute) {
+		this.picture = picture;
+		this.price = price;
+		this.quantity = quantity;
+		this.sold = sold;
+		this.content = content;
+		this.attribute = attribute;
+	}
 }
