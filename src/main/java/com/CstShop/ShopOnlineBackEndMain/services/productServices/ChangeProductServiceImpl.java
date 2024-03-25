@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -61,6 +60,13 @@ public class ChangeProductServiceImpl implements ProductServices {
 
 	@Override
 	public ProductDto changeProduct(ProductDto productDto) {
+		Products products = productsRepository.findAllById(productDto.getId());
+
+		String urlPicture = productDto.getPicture();
+		if (productDto.getPicture() != null && !productDto.getPicture().equals(products.getPicture())) {
+			urlPicture = cloudServices.uploadPictureByBase64(productDto.getPicture());
+		}
+
 		EProductTypes type = switch (productDto.getType()) {
 			case "Điện thoại phụ kiện" -> EProductTypes.DIENTHOAIPHUKIEN;
 			case "Máy tính laptop" -> EProductTypes.MAYTINHLAPTOP;
@@ -68,13 +74,14 @@ public class ChangeProductServiceImpl implements ProductServices {
 			case "Mỹ phẩm chính hãng" -> EProductTypes.MYPHAMCHINHHANG;
 			default -> EProductTypes.SANPHAMKHAC;
 		};
-		productsRepository.alterProduct(productDto.getId(), productDto.getName(), productDto.getPicture(), productDto.getSold(), productDto.getQuantity(), type, productDto.getState());
-
-		Products products = productsRepository.findAllById(productDto.getId());
+		productsRepository.alterProduct(productDto.getId(), productDto.getName(), urlPicture, productDto.getSold(), productDto.getQuantity(), type, productDto.getState());
 
 		Descriptions descriptions = descriptionsRepository.findByProduct(products);
 		descriptions.setContent(productDto.getDescription());
 		descriptionsRepository.save(descriptions);
+
+		Double[] priceMin = new Double[1];
+		priceMin[0] = productDto.getPriceMin();
 
 		List<AttributeDto> attributeDtoList = productDto.getProductTypeList();
 		List<Attributes> attributesList = products.getAttributes();
@@ -157,141 +164,13 @@ public class ChangeProductServiceImpl implements ProductServices {
 			}
 		}
 
+		products.setPriceMin(priceMin[0]);
 		productsRepository.save(products);
 		return takeProductServices.makeDtoByProducts(List.of(products)).get(0);
 	}
 
-//	@Override
-//	public ProductDto addProduct(ProductDto productDto) {
-//		System.out.println(productDto);
-//
-//		String urlPicture = "";
-//		if (productDto.getPicture() != null) {
-//			urlPicture = cloudServices.uploadPictureByBase64(productDto.getPicture());
-//		}
-//
-//		productDto.setPicture(urlPicture);
-//
-//		Products products = new Products(productDto);
-//		productsRepository.save(products);
-//
-//		Descriptions descriptions = new Descriptions(productDto.getDescription(), products);
-//		descriptionsRepository.save(descriptions);
-//
-//		products.setDescription(descriptions);
-//		productsRepository.save(products);
-//
-//		final Double[] priceMin = {products.getPriceMin()};
-//
-//		List<AttributeDto> attributeDtoList = productDto.getProductTypeList();
-//		if (attributeDtoList.size() > 0) {
-//			List<Attributes> attributesList = new ArrayList<>();
-//			attributeDtoList.forEach(
-//							attributeDto -> {
-//								Attributes attributes = new Attributes(attributeDto.getType(), products);
-//								attributesRepository.save(attributes);
-//								List<ProductTypeItemDto> productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
-//								productTypeItemDtoList.forEach(
-//												item -> {
-//													String urlPictureType = null;
-//													if (item.getPicture() != null)
-//														urlPictureType = cloudServices.uploadPictureByBase64(item.getPicture());
-//													ContentAttributes contentAttributes = new ContentAttributes(
-//																	urlPictureType,
-//																	item.getPrice(),
-//																	item.getQuantity(),
-//																	item.getSold(),
-//																	item.getContent()
-//													);
-//													if (priceMin[0] > item.getPrice())
-//														priceMin[0] = item.getPrice();
-//													contentAttributes.setAttribute(attributes);
-//													contentAttributesRepository.save(contentAttributes);
-//												}
-//								);
-//								attributesRepository.save(attributes);
-//							}
-//			);
-//
-//			products.setAttributes(attributesList);
-//		}
-////		else {
-//			products.setPriceMin(priceMin[0]);
-////		}
-//		productsRepository.save(products);
-//
-//		return takeProductServices.makeDtoByProducts(List.of(products)).get(0);
-//	}
-
-//	@Override
-//	public ProductDto addProduct(ProductDto productDto) {
-//		System.out.println(productDto);
-//
-//		String urlPicture = "";
-//		if (productDto.getPicture() != null) {
-//			urlPicture = cloudServices.uploadPictureByBase64(productDto.getPicture());
-//		}
-//
-//		productDto.setPicture(urlPicture);
-//
-//		Products products = new Products(productDto);
-//		productsRepository.save(products);
-//
-//		Descriptions descriptions = new Descriptions(productDto.getDescription(), products);
-//		descriptionsRepository.save(descriptions);
-//
-//		products.setDescription(descriptions);
-//		productsRepository.save(products);
-//
-//		Double[] priceMin = new Double[1];
-//		priceMin[0] = productDto.getPriceMin();
-//		System.out.println("=== " + priceMin[0] );
-//
-//		List<AttributeDto> attributeDtoList = productDto.getProductTypeList();
-//		if (attributeDtoList.size() > 0) {
-//			List<Attributes> attributesList = new ArrayList<>();
-//			attributeDtoList.forEach(attributeDto -> {
-//				Attributes attributes = new Attributes(attributeDto.getType(), products);
-//				attributesRepository.save(attributes);
-//				attributesList.add(attributes);
-//
-//				List<ProductTypeItemDto> productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
-//				productTypeItemDtoList.forEach(item -> {
-//					String urlPictureType = null;
-//					if (item.getPicture() != null) {
-//						urlPictureType = cloudServices.uploadPictureByBase64(item.getPicture());
-//					}
-//					ContentAttributes contentAttributes = new ContentAttributes(
-//									urlPictureType,
-//									item.getPrice(),
-//									item.getQuantity(),
-//									item.getSold(),
-//									item.getContent()
-//					);
-//					if (priceMin[0] > item.getPrice()) {
-//						priceMin[0] = item.getPrice();
-//					}
-//					contentAttributes.setAttribute(attributes);
-//					contentAttributesRepository.save(contentAttributes);
-//				});
-//			});
-//
-//			products.setAttributes(attributesList);
-//		}
-//
-//		System.out.println("helo--------------------");
-//		System.out.println("====" + priceMin[0]);
-//		System.out.println("bye--------------------");
-//
-//		products.setPriceMin(priceMin[0]); // Set the minimum price
-//		productsRepository.save(products);
-//
-//		return takeProductServices.makeDtoByProducts(List.of(products)).get(0);
-//	}
-
 	@Override
 	public ProductDto addProduct(ProductDto productDto) {
-
 		String urlPicture = "";
 		if (productDto.getPicture() != null) {
 			urlPicture = cloudServices.uploadPictureByBase64(productDto.getPicture());
@@ -312,42 +191,43 @@ public class ChangeProductServiceImpl implements ProductServices {
 		priceMin[0] = productDto.getPriceMin();
 
 		List<AttributeDto> attributeDtoList = productDto.getProductTypeList();
-		if (attributeDtoList.size() > 0) {
-			List<Attributes> attributesList = new ArrayList<>();
-			attributeDtoList.forEach(attributeDto -> {
-				Attributes attributes = new Attributes(attributeDto.getType(), products);
-				attributesRepository.save(attributes);
-				attributesList.add(attributes);
+//		if (attributeDtoList.size() > 0) {
+		List<Attributes> attributesList = new ArrayList<>();
+		attributeDtoList.forEach(attributeDto -> {
+			Attributes attributes = new Attributes(attributeDto.getType(), products);
+			attributesRepository.save(attributes);
+			attributesList.add(attributes);
 
-				List<ProductTypeItemDto> productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
-				productTypeItemDtoList.forEach(item -> {
-					String urlPictureType = "";
-					if (!item.getPicture().equals("")) {
-						try {
-							urlPictureType = cloudServices.uploadPictureByBase64(item.getPicture());
-						} catch (Exception e){
-							urlPictureType = "";
-						}
-					}
+			List<ProductTypeItemDto> productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
 
-					ContentAttributes contentAttributes = new ContentAttributes(
-									urlPictureType,
-									item.getPrice(),
-									item.getQuantity(),
-									item.getSold(),
-									item.getContent(),
-									attributes
-					);
-					if (priceMin[0] > item.getPrice()) {
-						priceMin[0] = item.getPrice();
-					}
-					contentAttributesRepository.save(contentAttributes);
-				});
+			for (ProductTypeItemDto item : productTypeItemDtoList) {
+				String urlPictureType = "";
+				if (!item.getPicture().equals("")) {
+						urlPictureType = cloudServices.uploadPictureByBase64(item.getPicture());
+				}
 
-			});
+				Double price = priceMin[0];
+				if (item.getPrice() != null)
+					price = item.getPrice();
 
-			products.setAttributes(attributesList);
-		}
+				ContentAttributes contentAttributes = new ContentAttributes(
+								urlPictureType,
+								price,
+								item.getQuantity(),
+								item.getSold(),
+								item.getContent(),
+								attributes
+				);
+				if (priceMin[0] > price) {
+					priceMin[0] = price;
+				}
+				contentAttributesRepository.save(contentAttributes);
+			}
+
+		});
+
+		products.setAttributes(attributesList);
+//		}
 
 		products.setPriceMin(priceMin[0]);
 		productsRepository.save(products);

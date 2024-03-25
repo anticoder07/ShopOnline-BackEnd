@@ -45,7 +45,7 @@ public class AuthenticationService {
 		saveUserToken(userDetails, jwtToken);
 		return new AuthenticationResponse(
 						jwtToken,
-						refreshToken
+						userDetails.getAuthorities().toString().substring(6, 10)
 		);
 	}
 
@@ -69,7 +69,7 @@ public class AuthenticationService {
 		saveUserToken(userDetails, jwtToken);
 		return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, new AuthenticationResponse(
 						jwtToken,
-						refreshToken
+						userDetails.getAuthorities().toString().substring(6, 10)
 		));
 	}
 

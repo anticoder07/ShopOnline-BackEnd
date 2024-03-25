@@ -75,18 +75,27 @@ public class BillServices implements BasketBillServices {
 			billsList = billsRepository.findBillsByUser(getUser());
 		}
 		billsList.forEach((billItem) -> {
-
 							List<BillProduct> billProductList = billProductRepository.findAllByBill(billItem);
+
 							List<ProductBillItemDto> productBillItemList = new ArrayList<>();
-							billProductList.stream().forEach((billProductItem) -> {
+							billProductList.forEach((billProductItem) -> {
 								Products products = productRepository.findAllByBillProducts(billProductItem);
-								ContentAttributes ca = contentAttributesRepository.findById(billProductItem.getContentAttributeId()).orElseThrow();
-								productBillItemList.add(new ProductBillItemDto(
-												takeProductServices.makeDtoByProducts(Arrays.asList(products)).get(0),
-												billProductItem.getQuantity(),
-												billProductItem.getPriceOld(),
-												ca.getContent()
-								));
+								if (billProductItem.getContentAttributeId() == null) {
+									productBillItemList.add(new ProductBillItemDto(
+													takeProductServices.makeDtoByProducts(Collections.singletonList(products)).get(0),
+													billProductItem.getQuantity(),
+													billProductItem.getPriceOld(),
+													null
+									));
+								} else {
+									ContentAttributes ca = contentAttributesRepository.findById(billProductItem.getContentAttributeId()).orElseThrow();
+									productBillItemList.add(new ProductBillItemDto(
+													takeProductServices.makeDtoByProducts(Collections.singletonList(products)).get(0),
+													billProductItem.getQuantity(),
+													billProductItem.getPriceOld(),
+													ca.getContent()
+									));
+								}
 							});
 							billDtoList.add(new BillDto(
 											billItem.getId(),

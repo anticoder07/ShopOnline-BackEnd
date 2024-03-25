@@ -44,8 +44,8 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 
 	@Query("""
     select p from Products p 
-    where (p.name like %?1% or cast(p.type as string) 
-    like %?1%) and p.state = true
+    where (p.name like concat('%', ?1, '%') or cast(p.type as string) 
+    like concat('%', ?1, '%')) and p.state = true
 """)
 	List<Products> searchProductsByNameAndState(String name);
 
@@ -60,4 +60,10 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 							update Products p set p.quantity = :quantity where p.id = :id
 					""")
 	void updateQuantity(@Param("id") Long id, @Param("quantity") Long quantity);
+
+	@Modifying
+	@Query("""
+							update Products p set p.priceMin = :price where p.id = :id
+					""")
+	void updatePriceMin(@Param("id") Long id, @Param("price") Double price);
 }

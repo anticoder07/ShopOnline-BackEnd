@@ -29,7 +29,8 @@ public class LogOutService implements LogoutHandler {
 			storedToken.setRevoked(false);
 			storedToken.setExpired(false);
 			tokenRepository.save(storedToken);
-			SecurityContextHolder.clearContext();
 		}
+		SecurityContextHolder.clearContext();
 	}
+
 }

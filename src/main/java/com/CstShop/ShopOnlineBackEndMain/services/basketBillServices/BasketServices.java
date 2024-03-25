@@ -28,7 +28,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -53,6 +56,7 @@ public class BasketServices implements BasketBillServices {
 	private final BillsRepo billsRepository;
 
 	private final BillProductRepo billProductRepository;
+
 	@Override
 	public ResponseEntity<Object> addProductToBasket(Long id, Long quantity, Long contentAttributeId) {
 		Products products = productsRepository.findById(id).orElse(null);
@@ -122,7 +126,7 @@ public class BasketServices implements BasketBillServices {
 		if (basketProduct == null)
 			return ResponseHandler.generateErrorResponse(new MessageError("This product does not exist"));
 		basketProductRepository.delete(basketProduct);
-		return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.BAD_REQUEST, seeAllProductFromBasket());
+		return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, seeAllProductFromBasket());
 	}
 
 	@Override
@@ -133,10 +137,10 @@ public class BasketServices implements BasketBillServices {
 		basketProductList.forEach(basketProduct -> {
 			Products products = basketProduct.getProduct();
 			ProductDto productDto = takeProductServices.makeDtoByProducts(Collections.singletonList(products)).get(0);
-			ContentAttributes ca = contentAttributesRepository.findById(basketProduct.getContentAttributeId()).orElse(null);
-			if (ca == null) {
+			if (productDto.getProductTypeList().size() == 0) {
 				basketProductDtoList.add(new BasketProductDto(basketProduct.getId(), productDto, basketProduct.getQuantity(), "", null));
 			} else {
+				ContentAttributes ca = contentAttributesRepository.findById(basketProduct.getContentAttributeId()).orElse(null);
 				basketProductDtoList.add(new BasketProductDto(basketProduct.getId(), productDto, basketProduct.getQuantity(), ca.getContent(), basketProduct.getContentAttributeId()));
 			}
 		});
@@ -149,11 +153,19 @@ public class BasketServices implements BasketBillServices {
 		billsRepository.save(bills);
 		ids.forEach((id) -> {
 			BasketProduct basketProduct = basketProductRepository.findById(id).orElse(null);
-			ContentAttributes contentAttributes = contentAttributesRepository.findById(basketProduct.getContentAttributeId()).orElse(null);
-			productsRepository.updateQuantity(basketProduct.getProduct().getId(), basketProduct.getProduct().getQuantity() - basketProduct.getQuantity());
-			BillProduct billProduct = new BillProduct(basketProduct.getQuantity(), contentAttributes.getPrice(), basketProduct.getContentAttributeId(), basketProduct.getProduct(), bills);
-			billProductRepository.save(billProduct);
-			basketProductRepository.delete(basketProduct);
+			if (basketProduct.getContentAttributeId() == null) {
+				BillProduct billProduct = new BillProduct(basketProduct.getQuantity(), basketProduct.getProduct().getPriceMin(), null , basketProduct.getProduct(), bills);
+				billProductRepository.save(billProduct);
+				basketProductRepository.delete(basketProduct);
+
+			} else {
+				ContentAttributes contentAttributes = contentAttributesRepository.findById(basketProduct.getContentAttributeId()).orElse(null);
+				productsRepository.updateQuantity(basketProduct.getProduct().getId(), basketProduct.getProduct().getQuantity() - basketProduct.getQuantity());
+				BillProduct billProduct = new BillProduct(basketProduct.getQuantity(), contentAttributes.getPrice(), basketProduct.getContentAttributeId(), basketProduct.getProduct(), bills);
+				billProductRepository.save(billProduct);
+				basketProductRepository.delete(basketProduct);
+			}
+
 		});
 
 		return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, seeAllProductFromBasket());

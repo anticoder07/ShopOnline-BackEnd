@@ -48,7 +48,7 @@ public class BasketBillController {
 		}
 	}
 
-	@PostMapping("basket/delete")
+	@GetMapping("basket/delete")
 	public ResponseEntity<Object> deleteProductIntoBasket(@RequestParam("i") Long id) {
 		try {
 			return basketServices.deleteProductIntoBasket(id);

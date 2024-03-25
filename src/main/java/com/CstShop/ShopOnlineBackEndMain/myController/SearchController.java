@@ -25,4 +25,10 @@ public class SearchController {
 	public ResponseEntity<Object> searchAllProductBasket(@PathVariable("name") String name) {
 		return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, searchServices.searchProductFromBasket(name));
 	}
+
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@GetMapping("/bill/{name}")
+	public ResponseEntity<Object> searchAllProductBill(@PathVariable("name") String name) {
+		return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, searchServices.searchProductFromBill(name));
+	}
 }

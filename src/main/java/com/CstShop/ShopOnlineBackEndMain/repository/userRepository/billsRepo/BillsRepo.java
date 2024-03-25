@@ -1,6 +1,5 @@
 package com.CstShop.ShopOnlineBackEndMain.repository.userRepository.billsRepo;
 
-import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.Users;
 import com.CstShop.ShopOnlineBackEndMain.entity.users.bills.Bills;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -41,7 +41,7 @@ public class ChangeProductController {
 		}
 	}
 
-	@PostMapping("/delete")
+	@GetMapping("/delete")
 	public ResponseEntity<Object> deleteProduct(@RequestParam("i") Long id){
 		try {
 			boolean check = changeProductService.deleteProduct(id);
