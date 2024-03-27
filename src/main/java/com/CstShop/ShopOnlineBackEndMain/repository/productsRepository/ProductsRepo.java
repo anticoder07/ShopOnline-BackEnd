@@ -24,6 +24,8 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 
 	List<Products> findAllByStateAndType(Boolean state, EProductTypes types);
 
+
+//	@Query("select p from Products p")
 	Products findAllById(long id);
 
 	Products findAllByBillProducts(BillProduct billProduct);

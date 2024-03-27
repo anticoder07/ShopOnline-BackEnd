@@ -33,6 +33,8 @@ public class ChangeProductServiceImpl implements ProductServices {
 
 	private final CloudServices cloudServices;
 
+	private final InteractForProductServices interactProduct;
+
 	@Override
 	public List<ProductDto> makeDtoByProducts(List<Products> productsList) {
 		return null;
@@ -58,14 +60,17 @@ public class ChangeProductServiceImpl implements ProductServices {
 		return null;
 	}
 
-	@Override
-	public ProductDto changeProduct(ProductDto productDto) {
-		Products products = productsRepository.findAllById(productDto.getId());
 
-		String urlPicture = productDto.getPicture();
-		if (productDto.getPicture() != null && !productDto.getPicture().equals(products.getPicture())) {
-			urlPicture = cloudServices.uploadPictureByBase64(productDto.getPicture());
-		}
+
+	@Override
+	public ProductDto changeProduct(
+					ProductDto productDto
+	) {
+//		String urlPicture = "";
+//		if (productDto.getPicture() != null) {
+//			urlPicture = cloudServices.uploadPictureByBase64(productDto.getPicture());
+//		}
+//		productDto.setPicture(urlPicture);
 
 		EProductTypes type = switch (productDto.getType()) {
 			case "Điện thoại phụ kiện" -> EProductTypes.DIENTHOAIPHUKIEN;
@@ -74,97 +79,55 @@ public class ChangeProductServiceImpl implements ProductServices {
 			case "Mỹ phẩm chính hãng" -> EProductTypes.MYPHAMCHINHHANG;
 			default -> EProductTypes.SANPHAMKHAC;
 		};
-		productsRepository.alterProduct(productDto.getId(), productDto.getName(), urlPicture, productDto.getSold(), productDto.getQuantity(), type, productDto.getState());
+		productsRepository.alterProduct(
+						productDto.getId(),
+						productDto.getName(),
+						productDto.getPicture(),
+						productDto.getSold(),
+						productDto.getQuantity(),
+						type,
+						productDto.getState()
+		);
+
+		Products products = productsRepository.findAllById(productDto.getId());
 
 		Descriptions descriptions = descriptionsRepository.findByProduct(products);
-		descriptions.setContent(productDto.getDescription());
-		descriptionsRepository.save(descriptions);
-
-		Double[] priceMin = new Double[1];
-		priceMin[0] = productDto.getPriceMin();
-
-		List<AttributeDto> attributeDtoList = productDto.getProductTypeList();
-		List<Attributes> attributesList = products.getAttributes();
-
-		int lengthAttribute = attributeDtoList.size();
-		if (attributeDtoList.size() > attributesList.size())
-			lengthAttribute = attributesList.size();
-
-		for (int i = 0; i < lengthAttribute; i++) {
-			attributesList.get(i).setNameType(attributeDtoList.get(i).getType());
-			attributesRepository.save(attributesList.get(i));
-
-			List<ProductTypeItemDto> productTypeItemDtoList = attributeDtoList.get(i).getProductTypeItemDtoList();
-			List<ContentAttributes> contentAttributesList = attributesList.get(i).getContentAttributes();
-			int lengthType = productTypeItemDtoList.size();
-			if (productTypeItemDtoList.size() > contentAttributesList.size()) {
-				lengthType = contentAttributesList.size();
-			}
-			for (int j = 0; j < lengthType; j++) {
-				contentAttributesRepository.updateContentAttributes(
-								contentAttributesList.get(j).getId(),
-								productTypeItemDtoList.get(j).getPicture(),
-								productTypeItemDtoList.get(j).getPrice(),
-								productTypeItemDtoList.get(j).getQuantity(),
-								productTypeItemDtoList.get(j).getSold(),
-								productTypeItemDtoList.get(j).getContent()
-				);
-			}
-			for (int j = lengthType; j < contentAttributesList.size(); j++) {
-				// delete content attributes redundant
-				try {
-					contentAttributesRepository.deleteById(contentAttributesList.get(j).getId());
-				} catch (Exception e) {
-					log.error("error: " + e);
-				}
-			}
-			for (int j = lengthType; j < productTypeItemDtoList.size(); j++) {
-				// make and save content attributes redundant
-				ContentAttributes contentAttributes = new ContentAttributes(
-								productTypeItemDtoList.get(j).getPicture(),
-								productTypeItemDtoList.get(j).getPrice(),
-								productTypeItemDtoList.get(j).getQuantity(),
-								productTypeItemDtoList.get(j).getSold(),
-								productTypeItemDtoList.get(j).getContent()
-				);
-				contentAttributes.setAttribute(attributesList.get(i));
-				contentAttributesRepository.save(contentAttributes);
-			}
-
-			attributesRepository.save(attributesList.get(i));
-		}
-		for (int i = lengthAttribute; i < attributesList.size(); i++) {
-			List<ContentAttributes> contentAttributesList = attributesList.get(i).getContentAttributes();
-			contentAttributesList.forEach(
-							contentAttributes -> {
-								contentAttributesRepository.deleteById(contentAttributes.getId());
-							}
-			);
-			attributesRepository.deleteById(attributesList.get(i).getId());
-		}
-
-		for (int i = lengthAttribute; i < attributeDtoList.size(); i++) {
-			Attributes attributes = new Attributes(
-							attributeDtoList.get(i).getType(),
+		if (descriptions == null) {
+			Descriptions description = new Descriptions(
+							productDto.getDescription(),
 							products
 			);
-			attributesRepository.save(attributes);
-
-			List<ProductTypeItemDto> productTypeItemDtoList = attributeDtoList.get(i).getProductTypeItemDtoList();
-			for (ProductTypeItemDto productTypeItemDto : productTypeItemDtoList) {
-				ContentAttributes contentAttributes = new ContentAttributes(
-								productTypeItemDto.getPicture(),
-								productTypeItemDto.getPrice(),
-								productTypeItemDto.getQuantity(),
-								productTypeItemDto.getSold(),
-								productTypeItemDto.getContent()
-				);
-				contentAttributes.setAttribute(attributes);
-				contentAttributesRepository.save(contentAttributes);
-			}
+			descriptionsRepository.save(description);
+		} else {
+			descriptions.setContent(productDto.getDescription());
+			descriptionsRepository.save(descriptions);
 		}
 
-		products.setPriceMin(priceMin[0]);
+		List<AttributeDto> attributeDtoList = productDto.getProductTypeList(); // input
+		List<Attributes> attributesList = products.getAttributes(); // database
+		int minLength = Math.min(attributesList.size(), attributeDtoList.size());
+
+		Double priceMin = products.getPriceMin();
+
+		// Handle "change" action
+		for(int i = 0; i < minLength; i++) {
+			System.out.println("change");
+			priceMin = interactProduct.interactAttributes("change", attributeDtoList.get(i), attributesList.get(i), priceMin);
+		}
+
+		// Handle "add" action for remaining attributes
+		for (int i = minLength; i < attributeDtoList.size(); i++) {
+			priceMin = interactProduct.interactAttributes("add", attributeDtoList.get(i), attributesList.get(i), priceMin);
+			System.out.println("add");
+		}
+
+		// Handle "delete" action for remaining attributes
+		for (int i = minLength; i < attributesList.size(); i++) {
+			priceMin = interactProduct.interactAttributes("delete", attributeDtoList.get(i), attributesList.get(i), priceMin);
+			System.out.println("delete");
+		}
+
+		products.setPriceMin(priceMin);
 		productsRepository.save(products);
 		return takeProductServices.makeDtoByProducts(List.of(products)).get(0);
 	}
@@ -203,7 +166,7 @@ public class ChangeProductServiceImpl implements ProductServices {
 			for (ProductTypeItemDto item : productTypeItemDtoList) {
 				String urlPictureType = "";
 				if (!item.getPicture().equals("")) {
-						urlPictureType = cloudServices.uploadPictureByBase64(item.getPicture());
+					urlPictureType = cloudServices.uploadPictureByBase64(item.getPicture());
 				}
 
 				Double price = priceMin[0];

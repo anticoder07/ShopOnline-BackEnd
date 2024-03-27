@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("api/product")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @PreAuthorize("hasAnyRole('ADMIN')")
 @RequiredArgsConstructor
