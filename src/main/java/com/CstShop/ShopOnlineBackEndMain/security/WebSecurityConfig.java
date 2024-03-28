@@ -63,6 +63,7 @@ public class WebSecurityConfig {
 														"api/take/product/by/type",
 														"api/take/product/by/id",
 														"api/take/product/home-page/*",
+														"api/take/product/recommend",
 														"api/search/*"
 										)
 										.permitAll()

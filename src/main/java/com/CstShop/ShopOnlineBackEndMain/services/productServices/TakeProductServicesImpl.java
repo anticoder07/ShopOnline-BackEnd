@@ -149,7 +149,7 @@ public class TakeProductServicesImpl implements ProductServices {
 
 	@Override
 	public List<ProductDto> takeProductsRecommend(Products productCurrent) {
-		return null;
+		return makeDtoByProducts(productsRepository.recommendProduct(12));
 	}
 
 	@Override

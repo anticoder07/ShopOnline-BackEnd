@@ -25,7 +25,7 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 	List<Products> findAllByStateAndType(Boolean state, EProductTypes types);
 
 
-//	@Query("select p from Products p")
+	//	@Query("select p from Products p")
 	Products findAllById(long id);
 
 	Products findAllByBillProducts(BillProduct billProduct);
@@ -44,12 +44,12 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 					@Param("state") Boolean state
 	);
 
-//	or cast(p.type as string) like concat('%', ?1, '%'))
+	//	or cast(p.type as string) like concat('%', ?1, '%'))
 	@Query("""
-    select p from Products p 
-    where (p.name like concat('%', ?1, '%')) 
-    and p.state = true
-""")
+					    select p from Products p 
+					    where (p.name like concat('%', ?1, '%')) 
+					    and p.state = true
+					""")
 	List<Products> searchProductsByNameAndState(String name);
 
 	@Modifying
@@ -69,4 +69,11 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 							update Products p set p.priceMin = :price where p.id = :id
 					""")
 	void updatePriceMin(@Param("id") Long id, @Param("price") Double price);
+
+	@Query("""
+							select p from Products p where p.state = true
+							order by RAND()
+							limit 10
+					""")
+	List<Products> recommendProduct(int quantityProduct);
 }

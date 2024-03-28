@@ -40,4 +40,13 @@ public class TakeProductsController {
 			return ResponseHandler.generateErrorResponse(e);
 		}
 	}
+
+	@GetMapping("/recommend")
+	public ResponseEntity<Object> recommendProductsById() {
+		try {
+			return ResponseHandler.generateResponse(ResponseHandler.MESSAGE_SUCCESS, HttpStatus.OK, takeProductServices.takeProductsRecommend(null));
+		} catch (Exception e) {
+			return ResponseHandler.generateErrorResponse(e);
+		}
+	}
 }
