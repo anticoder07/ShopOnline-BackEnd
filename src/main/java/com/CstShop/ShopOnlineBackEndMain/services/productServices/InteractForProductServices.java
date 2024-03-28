@@ -2,6 +2,7 @@ package com.CstShop.ShopOnlineBackEndMain.services.productServices;
 
 import com.CstShop.ShopOnlineBackEndMain.entity.products.Attributes;
 import com.CstShop.ShopOnlineBackEndMain.entity.products.ContentAttributes;
+import com.CstShop.ShopOnlineBackEndMain.entity.products.Products;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.MessageError;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.AttributeDto;
 import com.CstShop.ShopOnlineBackEndMain.payload.response.dto.productDtos.ProductTypeItemDto;
@@ -11,7 +12,7 @@ import com.CstShop.ShopOnlineBackEndMain.services.CloudServices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,25 +23,6 @@ public class InteractForProductServices {
 	private final AttributesRepo attributesRepository;
 
 	private final CloudServices cloudServices;
-
-	public String isBase64(String input) {
-		try {
-			String base64String = input.split(",")[1].trim();
-
-			byte[] decodedBytes = Base64.getDecoder().decode(base64String);
-
-			String reencodedString = Base64.getEncoder().encodeToString(decodedBytes);
-
-			if (reencodedString.equals(base64String)) {
-				return input;
-			} else {
-				return "";
-			}
-		}
-		catch (ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
-			return "";
-		}
-	}
 
 	public Double findMinPriceOfAttributes(Attributes attributes) {
 		List<ContentAttributes> contentAttributesList = attributes.getContentAttributes();
@@ -56,15 +38,26 @@ public class InteractForProductServices {
 					String func,
 					AttributeDto attributeDto,
 					Attributes attributes,
+					Products product,
 					Double priceMin
 	) {
 		double priceMinTemp = 0.0;
-		List<ContentAttributes> contentAttributes = attributes.getContentAttributes();
-		List<ProductTypeItemDto> productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
+		List<ContentAttributes> contentAttributes = new ArrayList<>();
+		List<ProductTypeItemDto> productTypeItemDtoList = new ArrayList<>();
+		int lengthCA = 0;
+		int lengthCADto = 0;
+		try {
+			contentAttributes = attributes.getContentAttributes();
+			lengthCA = contentAttributes.size();
+		} catch (Exception ignored) {
+		}
 
-		int lengthCA = contentAttributes.size();
-		int lengthCADto = productTypeItemDtoList.size();
-		System.out.println(lengthCA);
+		try {
+			productTypeItemDtoList = attributeDto.getProductTypeItemDtoList();
+			lengthCADto = productTypeItemDtoList.size();
+		} catch (Exception ignored) {
+		}
+
 		int lengthTemp = Math.min(lengthCA, lengthCADto);
 		if (func.equals("change")) {
 			for (int i = 0; i < lengthTemp; i++) {
@@ -74,33 +67,27 @@ public class InteractForProductServices {
 
 				ContentAttributes contentAttributesTemp = new ContentAttributes(
 								contentAttributes.get(i).getId(),
-								"",
+								cloudServices.uploadPictureCustom(pti.getPicture()),
 								pti.getPrice(),
 								pti.getQuantity(),
 								pti.getSold(),
 								pti.getContent(),
 								attributes
 				);
-
 				interactContentAttributes("change", contentAttributesTemp);
-
 
 				priceMinTemp = i == 0 ? pti.getPrice() : Math.min(priceMinTemp, pti.getPrice());
 			}
-
 			for (int i = lengthTemp; i < lengthCA; i++) {
 				// delete
-				Long ptiId = productTypeItemDtoList.get(i).getId();
-				ContentAttributes ca = new ContentAttributes();
-				ca.setId(ptiId);
-				interactContentAttributes("delete", ca);
+				interactContentAttributes("delete", contentAttributes.get(i));
 			}
 
 			for (int i = lengthTemp; i < lengthCADto; i++) {
 				// add
 				ProductTypeItemDto pti = productTypeItemDtoList.get(i);
 				ContentAttributes contentAttributesTemp = new ContentAttributes(
-								"",
+								cloudServices.uploadPictureCustom(pti.getPicture()),
 								pti.getPrice(),
 								pti.getQuantity(),
 								pti.getSold(),
@@ -124,11 +111,24 @@ public class InteractForProductServices {
 				interactContentAttributes("delete", contentAttributes.get(i));
 			}
 			attributesRepository.deleteById(attributes.getId());
-			priceMin = Double.NaN;
-		} else {
-			contentAttributesRepository.saveAll(contentAttributes);
-			attributesRepository.save(attributes);
-			priceMin = Math.min(priceMin, findMinPriceOfAttributes(attributes));
+
+			priceMin = 0.0;
+		} else { // add new attribute
+			Attributes newAttributes = new Attributes(attributeDto.getType(), product);
+			attributesRepository.save(newAttributes);
+
+			for (int i = 0; i < lengthCADto; i++) {
+				ContentAttributes newContentAttribute = new ContentAttributes(
+								cloudServices.uploadPictureCustom(productTypeItemDtoList.get(i).getPicture()),
+								productTypeItemDtoList.get(i).getPrice(),
+								productTypeItemDtoList.get(i).getQuantity(),
+								productTypeItemDtoList.get(i).getSold(),
+								productTypeItemDtoList.get(i).getContent(),
+								newAttributes
+				);
+				contentAttributesRepository.save(newContentAttribute);
+				priceMin = Math.min(priceMin, productTypeItemDtoList.get(i).getPrice());
+			}
 		}
 		return priceMin;
 	}
@@ -140,8 +140,7 @@ public class InteractForProductServices {
 				throw new MessageError("Product no exist");
 			}
 
-//			String urlIcon = cloudServices.uploadPictureByBase64(isBase64(contentAttributes.getPicture()));
-String urlIcon = "";
+			String urlIcon = cloudServices.uploadPictureCustom(contentAttributes.getPicture());
 			contentAttributesWillChange.setContent(contentAttributes.getContent());
 			contentAttributesWillChange.setPicture(urlIcon);
 			contentAttributesWillChange.setPrice(contentAttributes.getPrice());

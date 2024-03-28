@@ -44,10 +44,11 @@ public interface ProductsRepo extends JpaRepository<Products, Long> {
 					@Param("state") Boolean state
 	);
 
+//	or cast(p.type as string) like concat('%', ?1, '%'))
 	@Query("""
     select p from Products p 
-    where (p.name like concat('%', ?1, '%') or cast(p.type as string) 
-    like concat('%', ?1, '%')) and p.state = true
+    where (p.name like concat('%', ?1, '%')) 
+    and p.state = true
 """)
 	List<Products> searchProductsByNameAndState(String name);
 

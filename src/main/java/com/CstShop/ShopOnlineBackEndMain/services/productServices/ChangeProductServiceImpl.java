@@ -61,16 +61,11 @@ public class ChangeProductServiceImpl implements ProductServices {
 	}
 
 
-
 	@Override
 	public ProductDto changeProduct(
 					ProductDto productDto
 	) {
-//		String urlPicture = "";
-//		if (productDto.getPicture() != null) {
-//			urlPicture = cloudServices.uploadPictureByBase64(productDto.getPicture());
-//		}
-//		productDto.setPicture(urlPicture);
+		String urlPicture = cloudServices.uploadPictureCustom(productDto.getPicture());
 
 		EProductTypes type = switch (productDto.getType()) {
 			case "Điện thoại phụ kiện" -> EProductTypes.DIENTHOAIPHUKIEN;
@@ -82,7 +77,7 @@ public class ChangeProductServiceImpl implements ProductServices {
 		productsRepository.alterProduct(
 						productDto.getId(),
 						productDto.getName(),
-						productDto.getPicture(),
+						urlPicture,
 						productDto.getSold(),
 						productDto.getQuantity(),
 						type,
@@ -110,21 +105,19 @@ public class ChangeProductServiceImpl implements ProductServices {
 		Double priceMin = products.getPriceMin();
 
 		// Handle "change" action
-		for(int i = 0; i < minLength; i++) {
-			System.out.println("change");
-			priceMin = interactProduct.interactAttributes("change", attributeDtoList.get(i), attributesList.get(i), priceMin);
+		for (int i = 0; i < minLength; i++) {
+			priceMin = interactProduct.interactAttributes("change", attributeDtoList.get(i), attributesList.get(i), null, priceMin);
 		}
 
 		// Handle "add" action for remaining attributes
 		for (int i = minLength; i < attributeDtoList.size(); i++) {
-			priceMin = interactProduct.interactAttributes("add", attributeDtoList.get(i), attributesList.get(i), priceMin);
-			System.out.println("add");
+			priceMin = interactProduct.interactAttributes("add", attributeDtoList.get(i), null, products, priceMin);
+
 		}
 
 		// Handle "delete" action for remaining attributes
 		for (int i = minLength; i < attributesList.size(); i++) {
-			priceMin = interactProduct.interactAttributes("delete", attributeDtoList.get(i), attributesList.get(i), priceMin);
-			System.out.println("delete");
+			priceMin = interactProduct.interactAttributes("delete", null, attributesList.get(i), null, priceMin);
 		}
 
 		products.setPriceMin(priceMin);

@@ -3,7 +3,6 @@ package com.CstShop.ShopOnlineBackEndMain.entity.products;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
