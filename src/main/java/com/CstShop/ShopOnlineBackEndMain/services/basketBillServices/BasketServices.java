@@ -156,12 +156,18 @@ public class BasketServices implements BasketBillServices {
 			if (basketProduct.getContentAttributeId() == null) {
 				BillProduct billProduct = new BillProduct(basketProduct.getQuantity(), basketProduct.getProduct().getPriceMin(), null , basketProduct.getProduct(), bills);
 				billProductRepository.save(billProduct);
+				Products products = basketProduct.getProduct();
+				products.setSold(products.getSold() + 1);
+				productsRepository.save(products);
 				basketProductRepository.delete(basketProduct);
 
 			} else {
 				ContentAttributes contentAttributes = contentAttributesRepository.findById(basketProduct.getContentAttributeId()).orElse(null);
 				productsRepository.updateQuantity(basketProduct.getProduct().getId(), basketProduct.getProduct().getQuantity() - basketProduct.getQuantity());
 				BillProduct billProduct = new BillProduct(basketProduct.getQuantity(), contentAttributes.getPrice(), basketProduct.getContentAttributeId(), basketProduct.getProduct(), bills);
+				Products products = basketProduct.getProduct();
+				products.setSold(products.getSold() + 1);
+				productsRepository.save(products);
 				billProductRepository.save(billProduct);
 				basketProductRepository.delete(basketProduct);
 			}
